@@ -333,3 +333,157 @@ ReactDOM.render(element, document.getElementById('root'));
 
 serviceWorker.unregister();
 ```
+
+## JSX 속성 정의
+
+HTML 태그 속성을 사용하면 태그 내에 여러 기능을 추가하거나 디자인을 변경할 수 있습니다.
+
+JSX의 문법에서는 태그 내에 원하는 속성을 삽입할 수 있도록 합니다. 대표적으로 링크 이동, 이미지 삽입 등이 있습니다.
+
+이미지 삽입 예시
+```
+<img src="https://elice-front-door-cdn.azureedge.net/web/static/media/lost_bunny.fcbeff1a.png">
+```
+
+링크 이동 예시
+```
+<a href = 'www.naver.com'>네이버로 이동하기</a>
+```
+
+예시를 참고하여 엘리스 페이지로 이동하는 코드를 직접 작성해봅시다.
+
+### 지시사항
+
+1. <a>태그의 href속성을 활용해 엘리스 페이지(https://kdt.elice.io/explore) 로 이동하는 코드를 element 변수에 작성하세요.
+
+### 해답 코드
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//href 속성을 활용해 페이지 이동을 구현합니다.
+const element = (
+    <a href="https://kdt.elice.io/explore">엘리스로 이동하기</a>
+);
+
+ReactDOM.render(element, document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+
+## JSX로 자식 정의
+
+JSX는 태그 내에서 자식 태그를 정의할 수 있습니다. 
+
+자식 태그란 태그 내에 존재하는 하위 태그를 의미하며, 이 때 하위 태그를 포함한 상위 태그는 부모 태그가 됩니다.
+
+자식 태그가 둘 이상일 경우 반드시 상위 태그가 자식 태그들을 포함하는 형태가 되어야 합니다.
+
+### HTML 태그 예시
+```
+<div>
+    <h2>첫번째 자식태그입니다 </h2>
+    <h2>두번째 자식태그입니다.</h2>
+</div>
+```
+
+자식 태그를 활용해서 여러 줄을 출력하는 코드를 작성해봅시다.
+
+### 지시사항
+1. 자식 태그를 활용하여 출력 결과와 동일하도록 element 변수를 완성하세요. 사용되어야 하는 태그는 다음과 같습니다.
+  - 상위 태그: <div>
+  - 자식 태그:<h2>
+
+### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//자식태그를 활용하여 JSX코드를 작성해 element에 저장합니다.
+const element = (
+    <div>
+        <h2>안녕하세요:)</h2>
+        <h2>오늘도 화이팅!!</h2>
+    </div>
+);
+
+
+ReactDOM.render(element, document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+
+## JSX의 객체 표현
+
+JSX는 React.createElement() 메소드를 사용해서 자바스크립트로 HTML 요소를 작성할 수 있습니다. 
+
+예를 들어 다음과 같은 형식으로 element 객체를 생성할 수 있습니다.
+
+객체 생성 예시
+```
+const element = React.createElement(
+    '태그 명',
+    {className: '클래스 명'},
+    '출력 내용'
+);
+```
+
+- 태그 명: HTML의 태그 명
+- 클래스 명: 클래스의 이름
+- 출력 내용: 화면에 출력하고자 하는 내용
+
+단 className은 태그의 속성으로 반드시 똑같이 사용되는 것은 아닙니다. 
+
+예시로 아래처럼 사용이 가능합니다. 아래 두 코드는 형식은 다르지만 같은 내용을 담고 있습니다.
+
+- HTML 직접 표현
+```
+const myelement = <h1>I Love JSX!</h1>;
+```
+
+- HTML을 객체로 생성
+```
+const myelement = React.createElement('h1', {}, 'I do not use JSX!');
+```
+
+이런 식으로 객체를 생성하면 **React에서 자동으로 코드 내 버그를 체크한다는 장점**이 있습니다. 직접 실습해 봅시다!
+
+### 지시사항
+
+1. 아래의 JSX 코드를 React.createElement를 활용하여 element 객체로 생성하세요.
+```
+const element = <h2>
+        코더랜드에 오신것을 환영합니다:)
+</h2>;
+```
+
+2. 생성한 객체의 className을 "welcome" 으로 설정하세요.
+
+### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+
+//element 객체를 생성합니다.
+const element = React.createElement(
+    'h2',
+    {className: 'welcome'},
+    '코더랜드에 오신것을 환영합니다:)'
+);
+
+
+ReactDOM.render(element, document.getElementById('root'));
+
+serviceWorker.unregister();
+```

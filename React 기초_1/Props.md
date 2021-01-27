@@ -329,4 +329,107 @@ ReactDOM.render(element, document.getElementById('root'));
 serviceWorker.unregister();
 ```
 
+## Props 실습
+
+Props는 컴포넌트에 값을 전달하는 역할을 수행합니다. 컴포넌트는 Props를 수정할 수 없는 순수 함수로 정의됩니다.
+
+**순수함수란 입력값이 바뀌지 않고 항상 동일한 입력값에 대해 동일한 출력값을 제공하는 함수**입니다. 아래 예시를 살펴볼까요?
+
+- 순수함수 예시
+
+```
+function sum(a, b){
+   return a + b;
+}
+```
+
+- 순수함수가 아닌 예시
+
+```
+function withdraw(account, amount){
+    account.total -= amount;
+}
+```
+위는 **함수 내 인자값인 account의 값을 변경하려 하기 때문에 순수함수가 아닙니다.**
+
+또한 Props는 컴포넌트 호출 시, 인자값의 이름과 내용을 함께 제공합니다. 컴포넌트 내에서 ```props.[이름]```의 형식으로 인자값을 받아 사용합니다.
+
+### Props 예시
+```
+function UserInfo(props){
+  return(
+    <div className="UserInfo">
+      <div>영화: {props.name}</div>
+      <div>한줄평: {props.text}</div>
+    </div>
+  )
+}
+
+const element = (
+  <div>
+    <UserInfo name="겨울왕국" text="엘사가 너무 예뻐요!" /> # name, text 각각 다른 것을 받지만 ,를 찍지않고 이어서 씀에 유의하세요.
+    <UserInfo name="신과함께" text="배우님 연기력 최고" />
+  </div>
+);
+```
+
+해당 예시를 참고하여 Props를 활용해서 정의된 데이터 data의 값을 출력하는 페이지를 작성해봅시다.
+
+#### 지시사항
+
+1. Profile컴포넌트를 호출하여 element에 저장하세요. 매개변수로 다음 표현식을 전달하세요.
+
+| 매개변수 | 표현식 |
+|:---:|:---:|
+| name | data.name |
+| age | data.age |
+| gender | data.gender |
+
+2. Profile컴포넌트내에서 Props를 활용하여 값을 출력합니다.
+
+  - 출력은 ```<h2>```태그를 사용합니다.
+  - 출력문구는 하단의 출력 결과와 동일합니다.
+  - Props와 표현식을 이용해 이름, 나이, 성별을 나타내세요.
+
+> Tips : data 변수의 값을 참조할 때 표현식을 이용해 ```{data.name}, {data.age}, {data.gender}```와 같이 사용합니다.
+
+#### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//프로필 출력 컴포넌트
+function Profile(props){
+  return(
+      <div>
+          <h2>이름: {props.name}</h2>
+          <h2>나이: {props.age}</h2>
+          <h2>성별: {props.gender}</h2>
+      </div>
+  );
+}
+
+//데이터 저장 변수
+const data = {
+    name: 'Joshi',
+    age: '25',
+    gender: '남'
+};
+
+
+const element = (
+//Profile 컴포넌트를 호출합니다.
+//data의 값을 props로 제공합니다.
+    <Profile name={data.name} age={data.age} gender={data.gender} />
+);
+
+ReactDOM.render(element, document.getElementById('root'));
+
+
+serviceWorker.unregister();
+```
+
 

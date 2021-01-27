@@ -44,6 +44,38 @@ class Question extends React.Component { # 클래스 컴포넌트
 }
 ```
 
+### 컴포넌트 합성 실습
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//함수 컴포넌트를 사용하여 Subject컴포넌트를 정의합니다. Props와 표현식을 이용해 name 변수를 나타내세요.
+function Subject(props) {
+    return <h3>React를 이해하기 위해서는 {props.name}을(를) 알아야 합니다.</h3>
+}
+
+// Subject을 여러번 호출하는 Curriculum 컴포넌트를 작성합니다.
+function Curriculum() {
+  return (
+    <div>
+        <Subject name="HTML" />
+        <Subject name="CSS" />
+        <Subject name="JavaScript" />
+    </div>
+  );
+}
+
+//Curriculum을 ReactDOM과 렌더링합니다.
+ReactDOM.render(<Curriculum />, document.getElementById('root'));
+
+
+serviceWorker.unregister();
+```
+
 ReactDOM.render(<Question />, document.getElementById('root'));
 
 ## 컴포넌트 추출
@@ -120,3 +152,28 @@ function Comment(props) {
   );
 }
 ```
+
+# Props
+
+앞에서 간단히 설명했듯이 Props는 **컴포넌트로 전달되는 매개변수**라고 생각하시면 됩니다. 쉽게 생각하면 함수의 매개변수라고 생각해도 좋습니다. 
+
+**컴포넌트에서 어떤 값을 전달받아 처리하고 싶다면 Props**를 이용해야 합니다. 그리고 **컴포넌트를 호출할 때 Props를 넘겨줘야 합니다.** 
+
+마치 함수 호출 시 매개변수를 전달하는 것처럼요.
+
+아래 예제를 살펴보며 봅시다. Props는 **HTML 속성을 통해 컴포넌트로 전달***됩니다. 
+
+그리고 사용할 때는 **중괄호를 이용해 표현하며 ```this.props.속성```과 같은 형태로 호출**됩니다.
+```
+const element = <Introduce name="Elice" />;
+```
+```
+class Introduce extends React.Component {
+  render() {
+    return <h2>I am a {this.props.name}!</h2>;
+  }
+}
+```
+> 단, 위의 예제는 클래스형 컴포넌트이고 **함수형 컴포넌트에서 사용할 때는 this를 붙이지 않는 것에 유의하세요.**
+
+

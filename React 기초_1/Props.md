@@ -45,3 +45,78 @@ class Question extends React.Component { # 클래스 컴포넌트
 ```
 
 ReactDOM.render(<Question />, document.getElementById('root'));
+
+## 컴포넌트 추출
+
+한 컴포넌트가 **복잡하다면 일부를 추출해서 분리**하는 것이 가독성이 좋고 코드 재사용이 용이합니다. 
+
+만약 아래와 같은 댓글에 대한 컴포넌트가 있다고 해봅시다.
+```
+function Comment(props) {
+  return (
+    <div className="Comment"> # 댓글의 내용과 날짜를 띄우는 Comment
+      <div className="UserInfo"> # 사용자 정보를 띄우는 UserInfo
+        <img className="Avatar" # 사용자의 이미지를 띄우는 Avatar
+          src={props.author.avatarUrl}
+          alt={props.author.name}
+        />
+        <div className="UserInfo-name"> 
+          {props.author.name}
+        </div>
+      </div>
+      <div className="Comment-text"> 
+        {props.text}
+      </div>
+      <div className="Comment-date">
+        {formatDate(props.date)}
+      </div>
+    </div>
+  );
+}
+```
+댓글에는 사용자의 이미지를 띄우는 Avatar와 사용자 정보를 띄우는 UserInfo, 그리고 댓글의 내용과 날짜를 띄우는 Comment에 대한 요소로 이루어져 있습니다. 이를 3개의 컴포넌트로 아래처럼 나눌 수 있습니다.
+
+1. 먼저 이미지를 띄우는 부분을 Avatar 컴포넌트로 분리합니다.
+```
+function Avatar(props) {
+  return (
+    <img className="Avatar"
+      src={props.user.avatarUrl}
+      alt={props.user.name}
+    /> # 이미지 태그를 닫는 /입니다. 컴포넌트를 호출하는 /가 아닙니다.
+  );
+}
+```
+
+2. 그리고 사용자 정보를 띄우는 부분은 UserInfo 컴포넌트로 분리합니다.
+```
+function UserInfo(props) {
+  return (
+    <div className="UserInfo">
+      <Avatar user={props.user} /> # 컴포넌트 호출
+      <div className="UserInfo-name">
+        {props.user.name}
+      </div>
+    </div>
+  );
+}
+```
+
+마지막으로 댓글의 내용과 날짜를 띄우는 부분은 Comment 컴포넌트에 남겨둡니다. 
+
+처음 한 컴포넌트에 모든 내용이 있는 것보다, Comment 컴포넌트가 간단해진 것을 볼 수 있습니다.
+```
+function Comment(props) {
+  return (
+    <div className="Comment">
+      <UserInfo user={props.author} /> # 컴포넌트 호출
+      <div className="Comment-text">
+        {props.text}
+      </div>
+      <div className="Comment-date">
+        {formatDate(props.date)}
+      </div>
+    </div>
+  );
+}
+```

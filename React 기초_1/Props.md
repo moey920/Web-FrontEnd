@@ -177,3 +177,156 @@ class Introduce extends React.Component {
 > 단, 위의 예제는 클래스형 컴포넌트이고 **함수형 컴포넌트에서 사용할 때는 this를 붙이지 않는 것에 유의하세요.**
 
 
+## 컴포넌트 추출 실습
+
+컴포넌트를 활용하여 기능을 모듈화 하면 다음과 같은 이점이 있습니다.
+
+- 코드 유지보수성이 향상됩니다.
+- 코드 재사용이 용이합니다.
+- 가독성 향상됩니다.
+
+아래에 할 일에 대해 반환하는 Comment 컴포넌트가 있습니다.
+
+### 컴포넌트 추출 예시
+```
+function Comment(props){
+    return(
+        <div>
+            <div className="UserInfo"> {props.name}님의 할일 </div>
+            <div className="Todo">
+                <div>{props.todo.task1}</div>
+                <div>{props.todo.task2}</div>
+            </div>
+        </div>
+    );
+}
+```
+
+위의 컴포넌트를 3개의 컴포넌트로 분리할 수 있습니다.
+
+1. 값을 출력하는 컴포넌트
+```
+function Comment(props){
+    return(
+        <div>
+          <UserInfo name={props.name}/>
+          <Todo todo={props.todo}/>
+        </div>
+    );
+}
+```
+
+2. 할 일을 반환하는 컴포넌트
+```
+function Todo(props) {
+  return (
+    <div className="Todo">
+      <div>{props.todo.task1}</div>
+      <div>{props.todo.task2}</div>
+    </div>
+  );
+}
+```
+
+3. 유저의 정보를 반환하는 컴포넌트
+```
+function UserInfo(props) {
+  return (
+    <div>{props.name}님의 할일 </div>
+  );
+}
+```
+
+위의 예시를 참고하여 주어진 컴포넌트를 직접 세부적으로 추출하여 코드를 간결하게 변경해봅시다.
+
+#### 지시사항
+
+1. 추출할 컴포넌트와 변수에 대한 정보는 다음과 같습니다.
+
+- UserInfo: user의 이름(name), 나이(age)를 출력하는 컴포넌트
+- Comment: 넘겨 받은 text, 즉 한 줄 설명을 출력하는 컴포넌트
+- Profile: UserInfo, Comment 컴포넌트를 호출하는 컴포넌트
+- comment: user 데이터를 저장하는 변수
+
+아래의 Comment 컴포넌트를 참고하여 추출할 컴포넌트를 완성하세요.
+```
+function Comment(props) {
+    return (
+      <div className="Comment">
+        <div className="UserInfo">
+            <div> 이름: {props.user.name}</div>     
+            <div> 나이: {props.user.age}</div>  
+        </div>
+        <div className="Comment-text">
+          <div className="Comment">문구: {props.text}</div>
+        </div>
+      </div>
+    );
+}
+```
+
+2. 지시사항 1번을 참고하여 아직 완성되지 않은 두 개의 함수형 컴포넌트를 완성하세요.
+  
+  - UserInfo: 자식 태그 ```<div>```에 Props로 전달받은 user의 name과 age를 각각 출력
+  - Profile: UserInfo 호출 후 props.author 전달 및 Comment 호출 후 props.text 전달
+
+> Tips : HTML 태그 내에 주석을 사용하기 위해는 괄호를 이용해 {/* */}처럼 해야 합니다.
+
+#### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//user의 정보(이름, 프로필사진) 출력 컴포넌트
+function UserInfo(props) {
+  return (
+    <div className="UserInfo">
+        <div> 이름: {props.author.name}</div> // 자식 태그 <div>에 Props로 전달받은 user의 name과 age를 각각 출력  
+        <div> 나이: {props.author.age}</div>  
+    </div>
+  );
+}
+
+//코멘트 출력 컴포넌트
+function Comment(props){
+    return(
+        <div className="Comment">문구: {props.text}</div>
+    );
+}
+
+//문구 출력 컴포넌트
+function Profile(props) {
+  return (
+    <div className="Profile">
+        <UserInfo author={props.author} /> // UserInfo 호출 후 props.author 전달 
+        <Comment text={props.text} /> // Comment 호출 후 props.text 전달
+    </div>
+  );
+}
+
+//데이터 저장 변수
+const comment = {
+  text: 'I hope you enjoy learning React!',
+  author: {
+    name: '엘리스 토끼',
+    age: '12',
+  },
+};
+
+const element = (
+  <Profile
+    text={comment.text}
+    author={comment.author}
+  />
+);
+
+ReactDOM.render(element, document.getElementById('root'));
+
+
+serviceWorker.unregister();
+```
+
+

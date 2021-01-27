@@ -518,13 +518,37 @@ const element = <h1>Hello, elice</h1>;
 ReactDOM.render(element, document.getElementById('root'));
 ```
 
-매개변수로는 표시할 엘리먼트와 HTML 어디에서 표시할 지를 넘겨줘야 합니다. 
+**매개변수**로는 **표시할 엘리먼트**와 **HTML 어디에서 표시할 지**를 넘겨줘야 합니다. 
 
-이 때 document.getElementById() 의 매개변수에 찾을 id를 넘겨줌으로써 표시할 위치를 찾을 수 있습니다. 해당 함수는 넘겨준 id의 요소를 가져와줍니다.
+이 때 ```document.getElementById() 의 매개변수에 찾을 id```를 넘겨줌으로써 표시할 위치를 찾을 수 있습니다. 해당 함수는 넘겨준 id의 요소를 가져와줍니다.
 
-엘리먼트 업데이트
-엘리먼트는 한 번 생성되면 수정이 불가능한 불변 객체이기 때문에 값을 변경하고 싶으면 새로운 엘리먼트를 만들어 업데이트 해야 합니다. 만약 시간을 출력하는 기능을 구현하고 싶다면 매 초마다 렌더링을 해줘야 합니다.
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 
+
+//hello, React!를 출력하는 JSX를 element에 저장합니다.
+const element = (
+    <h1>"Hello, React!"
+    </h1>
+);
+
+//ReactDOM에 element를 렌더링합니다.
+ReactDOM.render(element, document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+
+## 엘리먼트 업데이트
+
+엘리먼트는 **한 번 생성되면 수정이 불가능한 불변 객체**이기 때문에 값을 변경하고 싶으면 새로운 엘리먼트를 만들어 업데이트 해야 합니다. 
+
+만약 시간을 출력하는 기능을 구현하고 싶다면 매 초마다 렌더링을 해줘야 합니다.
+
+```
 function tick() {
   const element = (
     <div>
@@ -535,4 +559,65 @@ function tick() {
 }
 
 setInterval(tick, 1000);
-Date객체의 toLocaleTimeString() 메소드를 이용하면 시간을 반환해주는데 실제로 시간이 변하는 것을 확인하기 위해서는 setInterval() 콜백을 이용해 tick을 계속해서 호출해야 합니다. setInterval()의 매개변수인 1000은 1초를 의미하며 해당 숫자를 바꿔 호출되는 간격을 변경할 수 있습니다. 해당 코드를 실행한 후 개발자 도구를 이용하면 HTML의 텍스트가 시간이 변함에 따라 똑같이 바뀌는 것을 확인할 수도 있습니다.
+```
+
+Date객체의 ```toLocaleTimeString()``` 메소드를 이용하면 시간을 반환해주는데 실제로 시간이 변하는 것을 확인하기 위해서는 
+
+```setInterval()``` 콜백을 이용해 **tick을 계속해서 호출**해야 합니다. 
+
+setInterval()의 매개변수인 1000은 1초를 의미하며 해당 숫자를 바꿔 호출되는 간격을 변경할 수 있습니다. 
+
+해당 코드를 실행한 후 개발자 도구를 이용하면 HTML의 텍스트가 시간이 변함에 따라 똑같이 바뀌는 것을 확인할 수도 있습니다.
+
+### 렌더링 된 엘리먼트 업데이트
+
+엘리먼트는 불변객체입니다. 불변객체란, 한번 생성하면 수정이 불가능한 객체를 의미합니다.
+
+기존의 엘리먼트를 수정하는 것은 불가능합니다. 엘리먼트를 업데이트 하기 위해서 새로운 엘리먼트를 생성한 후, ReactDOM.render()에 전달해야 합니다.
+
+해당 내용을 참고하여 버튼 클릭 횟수를 출력하는 페이지를 만들어 봅시다.
+
+#### 지시사항
+
+1. 버튼 클릭 시, 횟수가 증가하는 함수 click()을 정의하세요. 함수 안에서 value값을 1 증가시킨 후, 다시 value에 저장하세요.
+2. element를 ReactDOM에 렌더링하세요.
+
+> Tips : tick()함수는 1초에 한번씩 자동으로 호출됩니다. **함수 내에서 렌더링**을 한다면, **1초마다 새로운 엘리먼트가 생성**된 후, 렌더링이 진행됩니다. 이러한 과정을 통해 element를 업데이트 할 수 있습니다.
+
+#### 해답 코드
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//버튼 클릭된 횟수를 저장
+let value = 0
+
+
+//버튼 클릭시 횟수를 증가시키는 함수를 정의합니다.
+function click() {
+    value += 1
+}
+
+
+function tick(){
+  const element = (
+    <div>
+      <h1>버튼을 클릭해보세요</h1>
+      <button onClick={click}>Click Me!</button>
+      <h2>총 {value}번 클릭했습니다.</h2>
+    </div>
+  );
+  
+  ReactDOM.render(element,document.getElementById('root'));
+}
+
+//1초마다 tick()함수 호출
+setInterval(tick, 1000);
+
+serviceWorker.unregister();
+```
+

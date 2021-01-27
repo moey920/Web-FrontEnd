@@ -351,3 +351,152 @@ setInterval(tick, 1000);
 
 serviceWorker.unregister();
 ```
+
+### 클래스에 로컬 State 추가 실습
+
+State는 props와 같이 컴포넌트의 렌더링 결과물에 영향을 주는 데이터를 가진 객체입니다.
+
+props는 컴포넌트에 직접 전달되는 반면, State는 데이터가 컴포넌트 내에서 관리된다는 차이점이 있습니다. 
+
+- State를 사용하면 불필요한 내부 데이터를 은닉할 수 있다는 장점이 있습니다.
+
+다음으로 State를 사용하기 위해 클래스 컴포넌트에서 선언되어야 하는 constructor()에 대해 알아봅시다. 
+
+constructor()메소드는 컴포넌트를 초기화하는 메소드입니다. 해당 메소드는 아래의 과정을 통해 생성됩니다.
+
+1. 클래스 컴포넌트 내에 constructor()메소드 선언
+2. constructor(props)메소드 내에 super(props) 호출
+3. State 초기화
+
+이와 함께 State를 사용하기 위해서는 다음의 과정이 필수적입니다.
+
+1. 클래스 내에 constructor()메소드 추가
+2. super(props) 호출
+3. State 내에 데이터 삽입
+4. this.props를 this.state로 변경
+5. 컴포넌트 호출 시 props 넘겨주지 않으며 props를 제공하는 대신 State에 필요한 데이터 저장
+
+#### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//현재시간을 출력하는 컴포넌트
+class Clock extends React.Component {
+  // 초기 this.state를 지정하는 constructor() 함수를 추가하세요.
+    constructor(props) { // constructor(props)메소드 내에 super(props) 호출
+        super(props);
+        // this.state = {data: new Data()} 코드를 통해 State를 정의하세요.(State 초기화)
+        this.state = {
+            date: new Date()
+        };
+    }
+
+  //props를 state로 변경합니다.
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+
+//Clock 컴포넌트를 호출합니다.
+const element = <Clock date = {new Date()} />;
+
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+
+serviceWorker.unregister();
+```
+
+### 생명주기 메서드 추가
+
+컴포넌트는 생성->업데이트->제거의 생명주기를 지닙니다. 
+
+생명주기 메소드의 종류와 역할에 대해서도 확인해봅시다.
+
+생명주기 메소드
+
+- constructor(): State 데이터를 초기화 하는 메소드
+- render(): 클래스 컴포넌트에서 반드시 구현되어야 하는 메소드
+- componentDidMount(): 컴포넌트가 마운트 된 직후 호출되는 메소드
+- componentDidUpdate(): 업데이트가 진행된 직후에 호출되는 메소드
+- componentWillUnmoumt(): 컴포넌트가 마운트 해제되어 제거되기 직전에 호출되는 메소드
+
+이번에는 별다른 코드 작성 없이 개발자 도구를 통해 생명주기 절차가 어떻게 진행되는지 확인해봅시다.
+
+#### 지시사항
+
+1. 제공된 코드를 실행하여 결과 페이지를 화면에 띄우세요.
+2. 개발자 도구에서 console탭을 통해 컴포넌트의 생명주기를 확인하세요. 크롬의 오른쪽 상단의 메뉴 버튼 클릭 후 “도구 더보기” > “개발자 도구” 클릭하여 개발자 도구를 실행할 수 있습니다.
+3. 언제 어떤 메소드가 출력되는지 확인하세요.
+
+#### 해답 코드(개발자 도구의 console창 메서드 확인하기)
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+
+
+class Clock extends React.Component {
+  constructor(props) {
+    console.log("constructor() 호출")
+    super(props);
+    this.state = {date: new Date()};
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount() 호출")
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    console.log("componentWillUnmount() 호출")
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    console.log("tick() 호출")
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  render() {
+    console.log("render() 호출")
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Clock />,
+  document.getElementById('root')
+);
+serviceWorker.unregister();
+
+// constructor() 호출
+// render() 호출
+// componentDidMount() 호출 은 페이지 생성과 동시에 호출된다.
+// 이후 
+// 이후 
+// tick() 호출 : setState를 통해 컴포넌트 값을 변경한 직후직후(componentDidUpdate()) 메소드가 호출됨
+// rander() 호출 이 반복된다. 
+// componentWillUnmount()는 어떻게 봐야할지 모르겠다.
+```

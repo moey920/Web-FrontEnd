@@ -67,6 +67,86 @@ render() {
 }
 ```
 
+### 리액트에서의 이벤트 실습
+
+이벤트란 사용자의 행동에 반응하는 기능을 정의하는 것을 의미합니다. 이벤트의 종류는 다음과 같으며, 이 외의 다양한 이벤트가 존재합니다.
+
+- Keyboard Events
+- Focus Events
+- Mouse Events
+- Touch Events
+- UI Events
+
+React에서 이벤트를 처리할 때 몇가지 유의사항이 있습니다.
+
+- React의 이벤트는 카멜 케이스로 정의합니다.
+```
+onClick={buttonclickevent}(X)
+onClick={buttonClickEvent}(O)
+```
+
+- 문자열이 아닌 JSX 함수명으로 전달합니다.
+```
+onClick="함수명()" (X)
+onClick={함수명} (O)
+```
+
+> 이벤트 등록 방법
+
+1. function키워드를 사용해 이벤트 함수를 작성합니다.
+2. ```onClick={함수명}```으로 등록한 이벤트를 호출합니다.
+```
+function ActionLink() {
+  function handleClick(e) {
+    console.log('The link was clicked.');
+  }
+
+  return (
+    <a href="#" onClick={handleClick}>
+      Click me
+    </a>
+  );
+}
+```
+
+> 코드 설명 : ```handleClick(e)```: 클릭 시, console창에 문구를 출력하는 이벤트 함수
+
+#### 지시사항
+
+버튼 클릭 시 경고창을 띄우는 페이지를 작성합니다. 출력문구는 하단의 출력결과와 동일합니다.
+
+1. ActionLink 컴포넌트 내에 이벤트 함수를 정의합니다.
+2. ```<a>```태그에 클릭 이벤트를 등록합니다.
+
+> Tips : 경고창을 띄우기 위해 alert("출력 내용");함수를 활용합니다. 이벤트 등록은 onClick 속성을 활용합니다.
+
+#### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+
+function ActionLink() {
+  //이벤트를 등록합니다.
+    function onClick(e) {
+        alert("버튼이 클릭되었습니다.")
+    }
+  //a 태그에 이벤트를 등록합니다.
+    return (
+    <a href="#" onClick={onClick}>
+        Click me
+    </a>
+    );
+}
+
+ReactDOM.render(<ActionLink />, document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+
 ## 이벤트 작성하기
 
 function키워드를 사용해 이벤트 함수를 작성합니다.

@@ -500,3 +500,99 @@ serviceWorker.unregister();
 // rander() 호출 이 반복된다. 
 // componentWillUnmount()는 어떻게 봐야할지 모르겠다.
 ```
+
+### State 업데이트 올바르게 사용하기 실습
+
+State는 아래처럼 대입을 통한 데이터 변경이 불가능합니다.
+```
+this.state.comment = 'Hello';
+```
+
+State 업데이트를 위해서는 setState()메소드를 사용합니다. 
+
+클래스 내에 이벤트 함수를 작성한 후, **이벤트 발생 시 setState()를 호출하여 비동기적으로 State를 변경**할 수 있습니다.
+
+비동기적이란 일정 주기마다 변경되는 것이 아닌, 특정 이벤트를 통해 변경되는 것을 의미하며 예를 들어 버튼 클릭 같은 것을 말합니다.
+
+- setState() 사용 예시
+```
+onClickEventHandler = () => {
+  this.setState({
+    name: "엘리스 토끼"
+  });
+};
+```
+
+여기서 ```onClickEventHandler()``` 메소드가 호출되면 State의 name 데이터가 "엘리스 토끼"로 변경됩니다.
+
+설명을 바탕으로 이름과 직업을 변경하는 페이지를 작성하는 실습을 해봅시다. setState()를 활용하여 State 데이터를 업데이트 해야 합니다.
+
+#### 지시사항
+
+1. onNameHandler 내에 이름(name)을 event.target.value로 변경하는 기능을 구현하세요.
+2. onJobHandler 내에 직업(job)을 event.target.value로 변경하는 기능을 구현하세요.
+
+> Tips :페이지 내에서 입력한 데이터의 값은 event.target.value를 통해 가져올 수 있습니다.
+event.target은 자바스크립트에서 이벤트에 대한 대상을 얻기 위해 사용되는 객체입니다.
+
+#### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+class InputUserData extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { // State 초기화
+      name: "엘리스 토끼",
+      job: "developer"
+    };
+  }
+    // rander() 하기 전에 이벤트에 대한 State 비동기적 변경 메서드를 선언한다.
+
+  //name 데이터를 변경하는 메소드
+  onNameHandler = event => {
+    //setState를 사용해 name 데이터 업데이트 기능을 구현합니다.
+    this.setState({
+        name: event.target.value
+    });
+  };
+
+  //job 데이터를 변경하는 메소드
+  onJobHandler = event => {
+    //setState를 사용해 job 데이터 업데이트 기능을 구현합니다.
+    this.setState({
+        job: event.target.value
+    });
+  };
+
+
+  onClickEventHandler = () => {
+    alert("이름: " + this.state.name + ", 직업: " + this.state.job);
+  };
+
+  render() {
+    const { name, job } = this.state;
+    return (
+      <div>
+        <div>
+          name: <input type="text" value={name} onChange={this.onNameHandler} />
+        </div>
+        <div>
+          job: <input type="text" value={job} onChange={this.onJobHandler} />
+        </div>
+        <button type="button" onClick={this.onClickEventHandler}>
+          저장
+        </button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<InputUserData/>, document.getElementById('root'));
+
+serviceWorker.unregister();
+```

@@ -488,3 +488,51 @@ ReactDOM.render(element, document.getElementById('root'));
 
 serviceWorker.unregister();
 ```
+
+
+# 엘리먼트 렌더링
+
+엘리먼트란 React 앱의 가장 작은 단위를 말합니다. 또한 다음 장에서 배울 컴포넌트의 구성요소라는 것도 기억하시길 바랍니다. 
+
+엘리먼트에 화면에 표시할 것들을 기록하는데, 쉽게 말하자면 **HTML 요소**라고 할 수 있습니다. **렌더링은 이러한 요소들을 화면에 그리는 것**입니다.
+
+## ReactDOM과 렌더링
+
+DOM(Document Object Model)이란 객체 지향 모델을 통해 구조화된 문서를 표현하는 형식입니다. 
+
+React는 가상(Virtual) DOM과 실제로 표시되는 DOM을 유지합니다. 
+
+React는 실제 DOM을 추상화하여 가상 DOM에 만들어두고, 
+
+데이터가 업데이트되면 한 번에 렌더링하기 때문에 계속해서 DOM을 렌더링하는 것보다 속도가 빠릅니다. 
+
+ReactDOM.render() 메소드를 이용하면 렌더링을 하게 됩니다.
+
+HTML 파일 안에 id가 root인 요소가 있다고 해봅시다.
+```
+<div id="root"></div>
+```
+해당 HTML에 텍스트를 넣기 위해 ReactDOM.render()을 이용해 다음과 같이 렌더링을 할 수 있습니다.
+```
+const element = <h1>Hello, elice</h1>;
+ReactDOM.render(element, document.getElementById('root'));
+```
+
+매개변수로는 표시할 엘리먼트와 HTML 어디에서 표시할 지를 넘겨줘야 합니다. 
+
+이 때 document.getElementById() 의 매개변수에 찾을 id를 넘겨줌으로써 표시할 위치를 찾을 수 있습니다. 해당 함수는 넘겨준 id의 요소를 가져와줍니다.
+
+엘리먼트 업데이트
+엘리먼트는 한 번 생성되면 수정이 불가능한 불변 객체이기 때문에 값을 변경하고 싶으면 새로운 엘리먼트를 만들어 업데이트 해야 합니다. 만약 시간을 출력하는 기능을 구현하고 싶다면 매 초마다 렌더링을 해줘야 합니다.
+
+function tick() {
+  const element = (
+    <div>
+      <h1>{new Date().toLocaleTimeString()}</h1>
+    </div>
+  );
+  ReactDOM.render(element, document.getElementById('root'));
+}
+
+setInterval(tick, 1000);
+Date객체의 toLocaleTimeString() 메소드를 이용하면 시간을 반환해주는데 실제로 시간이 변하는 것을 확인하기 위해서는 setInterval() 콜백을 이용해 tick을 계속해서 호출해야 합니다. setInterval()의 매개변수인 1000은 1초를 의미하며 해당 숫자를 바꿔 호출되는 간격을 변경할 수 있습니다. 해당 코드를 실행한 후 개발자 도구를 이용하면 HTML의 텍스트가 시간이 변함에 따라 똑같이 바뀌는 것을 확인할 수도 있습니다.

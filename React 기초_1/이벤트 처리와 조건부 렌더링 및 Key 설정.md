@@ -167,6 +167,96 @@ function ActionLink() {
 }
 ```
 
+### 하이퍼링크 Default 설정 실습
+
+React에서 이벤트가 실행될 때, 페이지가 자동으로 새로고침 됩니다. 이를 방지하기 위해서 e.preventDefault()를 명시적으로 호출해야 합니다.
+
+아래 코드를 보시면 클릭 시, href로 이동하라는 동작이 있습니다.
+```
+<a href="#" onClick={handleClick}>
+    Click me
+</a>
+```
+
+위 코드를 동작하지 않고 onClick에 넘겨준 것만 실행되게 하기 위해선 preventDefault를 사용합니다.
+
+```
+function handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+}
+```
+
+> Tips : ```<a href ="#">```는 링크를 설정하지 않은 상태이기 때문에 현재 페이지로 이동하여 새로고침 됩니다. 이를 방지하는 것이 ```e.preventDefault()```입니다.
+
+> 클래스 컴포넌트에 이벤트 정의
+
+클래스 컴포넌트에 이벤트를 정의하는 방법은 다음과 같습니다.
+
+1. constructor()와 render()사이에 이벤트를 정의합니다.
+```
+이벤트 명 = () =>{
+ //이벤트 기능
+}
+```
+
+2. constructor()에서 정의한 이벤트를 바인딩합니다.
+```
+this.이벤트명 = this.이벤트명.bind(this);
+```
+
+3. render()내에서 이벤트를 호출합니다.
+```<button onClick={this.이벤트명}>```
+
+#### 지시사항
+
+클래스 컴포넌트에서 이벤트를 등록합니다. 버튼 클릭 시, off가 출력되도록 페이지를 작성합니다.
+
+1. 버튼 클릭시 isToggleOn의 값을 false로 변환하는 이벤트를 작성합니다.
+  - 이벤트 명은 handleClick으로 정의합니다.
+2. 정의한 이벤트를 바인딩합니다.
+3. ```<button>```태그에서 이벤트를 호출합니다.
+
+> Tips : state의 값을 변경하기 위해 setState()를 사용합니다. this.setState({isToggleOn: false});
+바인딩은 constructor()메소드에서 진행합니다.
+
+#### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {isToggleOn: true};
+
+    //정의한 이벤트를 바인딩합니다.
+    this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick = (e) => {
+        e.preventDefault();
+        this.setState({isToggleOn: false});
+    }
+
+    render() {
+        return (
+        //button 태그에 handleClick이벤트를 등록합니다.
+        <button onClick={this.handleClick}>
+            {this.state.isToggleOn ? 'ON' : 'OFF'}
+        </button>
+        );
+    }
+}
+
+ReactDOM.render(<Toggle />, document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+
 ## 이벤트 핸들링 하기
 
 1. 함수로 작성하여 핸들링 하기

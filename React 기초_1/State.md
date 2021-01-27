@@ -207,3 +207,147 @@ ReactDOM.render(<Header />, document.getElementById('root'));
 컴포넌트가 마운트 된 이후 호출되는 componentDidMount() 메소드를 이용해 알림을 줄 수가 있습니다. 
 
 즉 원하는 시점에 따라 컴포넌트가 다른 동작을 실행하길 원한다면, 생명주기 메소드에 대해서 잘 알고 있어야 합니다.
+
+### 컴포넌트 재사용을 위한 캡슐화 실습
+
+캡슐화란 모듈 단위로 컴포넌트를 나누어 구현하는 것을 의미합니다. 앞에서 했던 컴포넌트 추출이 바로 컴포넌트를 캡슐화 하는 것입니다.
+
+캡슐화를 통해 얻을 수 있는 이점을 다시 한 번 상기해 봅시다.
+
+- 코드 유지보수성이 향상됩니다.
+- 코드 재사용이 용이합니다.
+- 가독성 향상됩니다.
+
+캡슐화를 통해 코드의 재사용성을 높이기 위해, 제공된 코드를 수정해봅시다. 제공된 코드는 현재 시간을 출력하는 코드로 아래의 기능을 합니다.
+
+1. 현재 시간을 받아 element를 생성합니다.
+2. ReactDOM에 element를 렌더링합니다.
+3. 1~2과정을 1초에 한번씩 반복합니다.
+
+#### 지시사항
+
+1. 시간 출력 함수 Clock을 정의하세요. Clock에서 props.변수명.toLocaleTimeString() 로 현재시간을 받을 수 있습니다.
+2. element에서 Clock컴포넌트를 호출하세요. Clock 컴포넌트의 props는 ```변수명={new Date()}```로 제공할 수 있습니다.
+
+#### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//현재시간을 출력하는 컴포넌트
+//현재시간의 props를 받아 출력합니다.
+function Clock(props) {
+  return (
+    <div>
+      <h1>Hello, world!</h1>
+      <h2>현재 시간: {props.date.toLocaleTimeString()}</h2>
+    </div>
+  );
+}
+
+//매초 마다 호출되는 함수
+function tick() {
+  //Clock 컴포넌트를 호출합니다.
+  const element = <Clock date = {new Date()} />;
+  
+  //ReactDOM에 element을 렌더링합니다.
+  ReactDOM.render(element, document.getElementById('root'));
+}
+
+setInterval(tick, 1000);
+
+serviceWorker.unregister();
+```
+
+
+### 함수 컴포넌트를 클래스로 변환 실습
+
+함수 컴포넌트는 State를 가질 수 없다는 단점이 있습니다. 
+
+이를 해결하기 위해서 함수 컴포넌트를 클래스 컴포넌트로 변환하는 과정이 필요합니다. 변환 과정은 아래 순서로 이루어집니다.
+
+1. React.Component를 상속받는 컴포넌트 클래스 생성
+2. 메소드 명이 render()인 빈 메소드 추가
+3. 함수 컴포넌트 내용을 render()메소드로 이동
+4. render() 안의 props를 this.props로 변경
+5. 기존의 함수 컴포넌트 삭제
+
+##### 컴포넌트 변환 예시
+
+- 함수 컴포넌트
+```
+function Hello(props){
+    reuturn <h1> Hello, {props.name}</h1>;
+}
+```
+
+- 클래스 컴포넌트
+```
+class Hello extends React.Component {
+    render() {
+      return <h1> Hello, {this.props.name}</h1>;      
+    }
+}
+```
+컴포넌트 변환 예시를 참고하여 이전 실습에서 생성한 아래의 함수 컴포넌트 Clock을 클래스 컴포넌트로 변경해봅시다.
+
+```
+function Clock(props) {
+  return (
+    <div>
+      <h1>Hello, world!</h1>
+      <h2>It is {props.date.toLocaleTimeString()}</h2>
+    </div>
+  );
+}
+```
+
+#### 지시사항
+
+1. React.Component를 상속받는 Clock 클래스를 선언하세요.
+2. 클래스 내에 빈 메소드 render()를 정의하세요.
+3. render()내에 함수 컴포넌트의 코드를 그대로 넣으세요.
+4. props를 this.props로 변경하세요.
+5. tick 컴포넌트에서 시간을 props로 념겨 Clock 컴포넌트를 호출하는 element 변수를 정의하세요.
+
+> Tips : Clock 컴포넌트의 props는 ```변수명={new Date()}```로 제공할 수 있습니다.
+State란 props와 유사하지만, 비공개이며 컴포넌트에 의해 완전히 제어됩니다. 자세한 내용은 다음 실습에서 설명됩니다.
+
+#### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//클래스 컴포넌트를 사용하여 Clock컴포넌트를 작성합니다.
+class Clock extends React.Component{
+    render() {
+        return (
+            <div>
+                <h1>Hello, world!</h1>
+                <h2>It is {this.props.date.toLocaleTimeString()}</h2>
+            </div>
+        );
+    }
+} 
+
+
+//매초 마다 호출되는 함수
+function tick() {
+  //Clock 컴포넌트를 호출하고 현재 시간을 props로 넘겨줍니다.
+  const element = <Clock date = {new Date()} />;
+  ReactDOM.render(
+    element,
+    document.getElementById('root')
+  );
+}
+
+setInterval(tick, 1000);
+
+serviceWorker.unregister();
+```

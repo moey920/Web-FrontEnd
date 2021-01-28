@@ -49,6 +49,57 @@ function Greeting(props) { //인사하는 컴포넌트 선언
   );
 }
 ```
+### 엘리먼트 변수에 따른 조건부 렌더링 실습
+
+if나 조건부 연산자를 활용하여 조건부 렌더링을 제공합니다. 인자값에 따라 다른 컴포넌트를 렌더링할 수 있습니다.
+
+이를 통해 사용자의 동작에 대해 유연한 페이지를 작성합니다.
+```
+function UserGreeting(props) {
+  return <h1>Welcome back!</h1>;
+}
+
+function GuestGreeting(props) {
+  return <h1>Please sign up.</h1>;
+}
+```
+
+```
+function Greeting(props) {
+  const isLoggedIn = props.isLoggedIn;
+  if (isLoggedIn) {
+    return <UserGreeting />;
+  }
+  return <GuestGreeting />;
+}
+
+ReactDOM.render(
+  <Greeting isLoggedIn={false} />,
+  document.getElementById('root')
+);
+```
+
+Greeting 컴포넌트의 반환값이 ReactDOM에 렌더링됩니다. 
+
+Greeting 컴포넌트는 props값인 isLoggedIn에 따라 반환하는 컴포넌트가 변경됩니다.
+
+##### 지시사항
+
+if문을 활용하여 사용자의 동작에 따라 출력문구가 바뀌는 페이지를 작성합니다.
+
+1. isToggleOn의 값을 변경하는 handleClick이벤트를 정의합니다.
+  - true -> false
+  - false -> true
+2. 정의한 이벤트를 바인딩합니다.
+3. ```<button>```태그에서 이벤트 핸들러를 추가합니다.
+4. State 컴포넌트를 정의합니다.
+  - isToggleOn을 props로 받습니다.
+  - isToggleOn이 참이면 LoginState컴포넌트를 반환합니다.
+  - isToggleOn이 거짓이면 LogoutState컴포넌트를 반환합니다.
+
+> Tips : ````this.setState({isToggleOn: !this.state.isToggleOn})``` 을 통해 state를 변경합니다.
+바인딩은 constructor()메소드에서 진행합니다.
+
 ### 2. element variables
 
 react element를 변수에 저장할 수 있습니다.
@@ -162,6 +213,92 @@ ReactDOM.render(
   <Mailbox unreadMessages={messages} />, // props 값을 받는다.
   document.getElementById('root')
 );
+```
+
+#### 조건부 연산자 (?) 활용 실습
+
+조건부 연산자 (?)를 사용하여 if-else문을 한줄로 표현할 수 있습니다. 조건부 연산자는 다음과 같은 결과를 반환하는 연산자입니다.
+```
+(조건) ? expr1 : expr2
+```
+
+- 조건의 결과값이 true인 경우: expr1을 실행합니다.
+- 조건의 결과값이 false인 경우: expr2를 실행합니다.
+
+예시
+```
+render() {
+  const isLoggedIn = this.state.isLoggedIn;
+  return (
+    <div>
+      The user is <b>{isLoggedIn ? 'currently' : 'not'}</b> logged in.
+    </div>
+  );
+}
+```
+isLoggedIn의 값이 true라면, ‘currently’문자열을 출력합니다.
+
+isLoggedIn의 값이 false라면, ‘not’문자열을 출력합니다.
+
+##### 지시사항
+
+조건부 연산자를 활용하여 숫자가 양수인지 판단하는 페이지를 작성합니다. 조건에 따라 아래와 같은 결과값을 출력합니다.
+
+- 입력된 숫자 > 0: “양수입니다.”
+- 입력된 숫자 <= 0: “양수가 아닙니다.”
+
+1. Check의 props를 변수에 저장합니다.
+2. 조건에 따라 적절한 결과값을 출력합니다.
+  - 출력 태그는 ```<h2>```태그를 이용합니다.
+
+> Tips : parseInt(숫자로 변경할 문자열, 진법)을 사용해 문자를 숫자로 변환할 수 있습니다.
+
+##### 해답 코드
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+function Check(props){
+
+//Check의 props를 변수에 저장합니다.
+  const data = parseInt(props.num);
+  return(
+    <div>
+        <h2>{data>0 ? '양수입니다.' : '양수가 아닙니다.'}</h2>
+    </div>
+  )
+}
+
+class InputData extends React.Component {
+  state = {
+    num: ''
+  }
+  handleChange = (e) => {
+    this.setState({
+      num: e.target.value
+    })
+  }
+  render() {
+    return (
+      <form>
+        숫자를 입력하세요: <input
+          value={this.state.num}
+          onChange={this.handleChange}
+        />
+        
+        {<Check num={this.state.num}/>}
+      </form>
+      
+    );
+  }
+}
+
+ReactDOM.render(<InputData />,document.getElementById('root'));
+
+serviceWorker.unregister();
 ```
 
 #### 3항 연산자로 조건부 렌더링 구현하기

@@ -31,7 +31,7 @@ function GuestGreeting(props) { //게스트일 때 보여주는 컴포넌트
 
 이렇게 조건에 따라서 컴포넌트를 다르게 렌더링하는 컴포넌트를 만드는 방법을 알아보겠습니다.
 
-1. 조건문 사용하기
+### 1. 조건문 사용하기
 
 조건문 if를 사용하여 렌더링하는 방법을 알아보겠습니다.
 ```
@@ -49,7 +49,7 @@ function Greeting(props) { //인사하는 컴포넌트 선언
   );
 }
 ```
-2. element variables
+### 2. element variables
 
 react element를 변수에 저장할 수 있습니다.
 
@@ -58,7 +58,7 @@ react element를 변수에 저장할 수 있습니다.
 버튼의 내용이 Login이고, Logout이죠. 또 로그인 기능을 생각하며 코드를 살펴봅시다. 만약, 
 
 내가 로그인을 했다면 LogoutButton이 보여야 하고, 로그인을 해야 한다면 LoginButton이 보여야 합니다.
-``
+```
 function LoginButton(props) { //로그인 버튼
   return (
     <button onClick={props.onClick}>
@@ -77,8 +77,14 @@ function LogoutButton(props) { //로그아웃 버튼
 ```
 
 
-간편하게 다른 컴포넌트를 보여주고 싶은 경우에는 변수에 저장을 하여 보여주는 방법이 있습니다. LoginControl이라는 클래스 컴포넌트를 만들다고 가정을 한다면 이 컴포넌트는 로그인 여부에 따라서 판단을 합니다. 유저가 로그인을 하면 “어서오세요!” 라는 메세지가 보이면서 동시에 로그아웃 버튼이 보여야하고, 로그아웃을 하면 “처음오셨군요! 회원 가입 부탁드려요.” 라는 메세지가 보이면서 동시에 로그인 버튼이 보여야 합니다. 이러한 로직을 구현한 코드가 아래 코드입니다. 주석과 함께 확인해보세요.
+간편하게 **다른 컴포넌트를 보여주고 싶은 경우에는 변수에 저장**을 하여 보여주는 방법이 있습니다. 
 
+LoginControl이라는 클래스 컴포넌트를 만들다고 가정을 한다면 이 컴포넌트는 로그인 여부에 따라서 판단을 합니다. 
+
+유저가 로그인을 하면 “어서오세요!” 라는 메세지가 보이면서 동시에 로그아웃 버튼이 보여야하고, 로그아웃을 하면 “처음오셨군요! 회원 가입 부탁드려요.” 라는 메세지가 보이면서 동시에 로그인 버튼이 보여야 합니다. 
+
+이러한 로직을 구현한 코드가 아래 코드입니다. 주석과 함께 확인해보세요.
+```
 class LoginControl extends React.component {
   constructor(props) {
     super(props)
@@ -118,13 +124,23 @@ ReactDOM.render(
   <LoginControl />,
   document.getElementById('root')
 );
-3. JSX로 구현하기
-앞서 설명드린 방법은 자바스크립트에 더 가까운 코드라고 생각이 드실 것 입니다. 이번에는 react의 특징인 JSX를 사용하여 조건부 렌더링하는 방법을 알아보겠습니다.
+```
 
-&& 연산자 사용하기
+### 3. JSX로 구현하기
 
-&& 연산자는 자바스크립트의 연산자이기 때문에 { }을 사용해야 합니다. &&연산자는 리액트 엘리먼트를 렌더링 여부를 결정할 때 사용할 수 있는 간단한 연산자입니다. 아래 컴포넌트 코드를 보고 어떻게 구현을 하였는지 살펴보겠습니다.
+앞서 설명드린 방법은 자바스크립트에 더 가까운 코드라고 생각이 드실 것 입니다. 
 
+이번에는 react의 특징인 JSX를 사용하여 조건부 렌더링하는 방법을 알아보겠습니다.
+
+#### && 연산자 사용하기
+
+&& 연산자는 자바스크립트의 연산자이기 때문에 { }을 사용해야 합니다. 
+
+&&연산자는 리액트 엘리먼트를 렌더링 여부를 결정할 때 사용할 수 있는 간단한 연산자입니다. 
+
+아래 컴포넌트 코드를 보고 어떻게 구현을 하였는지 살펴보겠습니다.
+
+```
 function Mailbox(props) { //Mailbox라는 function component 선언
   const unreadMessages = props.unreadMessages; //읽지 않은 메세지 값을 받아 unreadMessages 변수에 할당
 /* 조건부 렌더링 부분! */
@@ -146,10 +162,12 @@ ReactDOM.render(
   <Mailbox unreadMessages={messages} />, // props 값을 받는다.
   document.getElementById('root')
 );
-3항 연산자로 조건부 렌더링 구현하기
+```
+
+#### 3항 연산자로 조건부 렌더링 구현하기
 
 3항 연산자로 간단하게 구현할 수 있습니다.
-
+```
 render() {
   const isLoggedIn = this.state.isLoggedIn;
   return (
@@ -163,3 +181,4 @@ render() {
     </div>
   );
 }
+```

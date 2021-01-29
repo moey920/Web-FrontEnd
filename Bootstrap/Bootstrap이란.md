@@ -204,9 +204,9 @@ react창을 열어보기 위해서는
 
 react-bootstrap은 Jquery 기반의 Bootstrap 를 React 환경으로 이식한 프로젝트입니다. 
 
-기존의 **<div> 엘리먼트에 Class를 설정하여 컴포넌트를 구분**하는 방식에서 
+기존의 <div> 엘리먼트에 Class를 설정하여 컴포넌트를 구분하는 방식에서 
 
-**Bootstrap 컴포넌트별로 React 컴포넌트가 구현**되어 더욱 리액트 환경에 맞는 개발이 가능합니다.
+Bootstrap 컴포넌트별로 React 컴포넌트가 구현되어 더욱 리액트 환경에 맞는 개발이 가능합니다.
 
 간단히 말해 react-bootstrap이 bootstrap에 비해 react에 더 최적화되어 빠르게 만들 수 있습니다.
 
@@ -262,4 +262,166 @@ React-Bootstrap은 부트스트랩의 재사용 가능한 구성 요소로 캡�
 
 또한, 코드 내비게이션을 원활하게하여 구조를 단순화고 앞으로 구현해야될 코드양이 적습니다.
 
+## 로컬 환경에서 React-Bootstrap 시작하기
+
+React-Bootstrap을 사용하는 가장 좋은 방법은 yarn(또는 npm)으로 설치할 수있는 npm 패키지를 사용하는 것입니다. 그러기 위해서는 npm 패키지를 먼저 설치해 주세요.
+
+엘리스실습을 할 때는 설치를 할 필요 없습니다. 참고만 해주세요.
+
+1. 리액트 부트스트랩 설치하기 (윈도우)
+```
+yarn add react-bootstrap bootstrap
+
+//또는 npm으로 설치
+npm install react-bootstrap bootstrap
+```
+    1-2. 리액트 부트스트랩 설치하기 (리눅스)
+    ```
+    npm install --save bootstrap
+    ```
+
+2.  프로젝트 만들고 프로젝트 폴더 이동
+```
+$ create-react-app react-boot1
+$ cd react-boot1
+```
+
+3. 프로젝트 이동 후 실행
+```
+$ pip install yarn
+$ yarn start
+or $ npm start
+```
+리액트 로고가 뜬 화면이 나오면 성공입니다.
+이제 간단한 예제로 버튼을 만들어 볼까요?
+
+4. react-bootstrap을 설정해줍니다.
+```
+$ yarn add react-bootstrap
+```
+이렇게 윈도우나 리눅스에 리액트 부트스트랩을 어떻게 설치하는지 알아보았습니다. 그럼 이제 가장 간단한 방법도 알아봅시다.
+
+### 가장 간편하게 리액트 부트스트랩 설치하는 방법
+
+```
+npx create-react-app my-app
+cd my-app
+npm start
+npm install react-bootstrap bootstrap
+```
+이제부터 본격적으로 부트스트랩을 활용해봅시다.
+
+1. 먼저 CSS stylesheet를 설정해줍니다.
+```
+최상단의 루트파일인 src/index.js 또는 App.js 파일에 다음 스타일을 추가해줍니다.
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+```
+
+또는 간단하게 상단에 CDN형태로 추가하면 쉽게 사용 할수 있습니다.
+```
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+```
+
+2. 컴포넌트 import하기
+
+전체 라이브러리가 아닌 react-bootstrap / Button과 같은 사용해야 되는 개별 구성 요소를 가져와야 특정 구성 요소만 가져오므로 클라이언트로 보내는 코드의 양을 크게 줄일 수 있습니다.
+```
+import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/Button';
+// 또는
+import { Button, ButtonToolbar } from 'react-bootstrap';
+```
+
+3. App.js 에서 버튼 예제 실행해보기
+```
+import React, { Component } from 'react';
+import { ButtonToolbar, Button } from 'react-bootstrap';
+
+// src/App.js
+
+function App() {
+  return (
+    <div>
+      <Button variant="primary">Click Me!</Button>
+    </div>
+  );
+}
+export default App;
+```
+
+버튼이 만들어 지면 성공입니다.
+
+# Yarn 설치하기
+
+1. yarn 윈도우에서 설치하기
+
+윈도우 키 + R 를 누르시거나 실행 창에 cmd로 입력한 뒤 확인 버튼을 눌러서 command 프로그램을 실행합니다.
+
+(mac 일 경우 ⌘ Command + Space > terminal을 눌러 실행합니다.)
+
+검은색 창이뜨면 “yarn” 명령어를 실행하여 아래의 메시지가 나오면 설치 완료 된것입니다.
+```
+yarn install v0.24.6
+[1/4] Resolving packages...
+success Already up-to-date.
+Done in 0.05s.
+```
+
+1-1. yarn 리눅스에서 설치하기
+```
+//yarn 설치
+$ sudo apt-get update && sudo apt-get install yarn
+//만약 설치가 안된다면 npm을 통해 설치
+$ npm install -g yarn
+```
+
+2. package.json 설정
+새 프로젝트를 시작할 때나 초기화 할 때 package.json을 생성합니다.
+```
+$ yarn init
+yarn init v1.13.0
+question name (react): aa
+question version (1.0.0): 1.0.0
+question description: test
+question entry point (index.js): index.js
+question repository url: localhost
+question author: pss
+question license (MIT): MIT
+question private:
+success Saved package.json
+Done in 34.17s.
+
+//아래와 같은 package.json파일 생성
+{
+  "name": "aa",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "index.js",
+  "repository": "localhost",
+  "author": "pss",
+  "license": "MIT"
+}
+```
+
+3. 패키지 설치하기
+```
+$ yarn install 
+또는 (install은 생략가능)
+$ yarn
+```
+
+4. bootstrap 라이브러리 설치하기
+```
+yarn add bootstrap
+# npm을 쓴다면  
+npm install --save bootstrap
+```
+
+5. bootstrap import 하기
+```
+import 'bootstrap/dist/css/bootstrap.css'
+```
+src/index.js와 같이 최상위에서 컴포넌트 호출하는 소스에 넣어주면 한 번만 입력해도 모든 컴포넌트에 적용됩니다.
 

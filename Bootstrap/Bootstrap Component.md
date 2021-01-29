@@ -89,6 +89,80 @@ Bootstrap에서는 아래의 규칙대로 이러한 그리드 시스템을 구�
 ```
 이렇게 해주면 됩니다.
 
+#### 그리드 실습
+
+grid 시스템으로 동일 간격의 레이아웃 만들기를 해봅시다.
+
+다음 표에서 부트 스트랩 그리드 시스템의 xs에서 xl까지 여러 장치에서 작동하는 방식을 확인해봅시다.
+
+|  | small | medium | large | extra-large |
+|:---:|:---:|:---:|:---:|:---:|
+| Max container width | 540px | 720px | 960px | 1140px |
+| Class prefix | .col-sm- | .col-md- | .col-lg- | .col-xl- |
+| # of columns | 12 |
+| Gutter width | 30px (15px on each side of a column) |
+| Nestable | Yes |
+
+#### 실습 코드
+```
+import React from 'react';
+import './App.css';
+import './bootstrap.min.css';
+import './bootstrap-grid.css';
+import './bootstrap-grid.min.css';
+
+class App extends React.Component {
+render() {
+  return (
+    <div className="App">
+        <h1 className="title">Hello, React!</h1>
+    <button type="button" className="btn btn-primary">
+        Bootstrap Button!
+    </button>
+    <div class = "padd">컨테이터를 같은 간격(1:1:1)의 3개의 기둥으로 나눠보세요. </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">1 of 3</div>
+            <div class="col">2 of 3</div>
+            <div class="col">3 of 3</div>
+        </div>
+    </div>
+
+    <div class = "padd"> 2.  다음은 2줄(row)를 같은간격으로 2등분, 3등분 해봅시다 </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">1 of 2</div>
+            <div class="col-md-4">2 of 2</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">1 of 3</div>
+            <div class="col-md-4">2 of 3</div>
+            <div class="col-md-4">3 of 3</div>
+        </div>
+    </div>
+
+    <div class = "padd"> 3. 다음은 4개의 같은간격의 기둥 한줄(row)와 2:1의 길이의 기둥 한 줄을 만들어봅시다</div>
+    <div class="container">
+        <div class="row">
+                <div class="col-md-4">1 of 4</div>
+                <div class="col-md-4">2 of 4</div>
+                <div class="col-md-4">3 of 4</div>
+                <div class="col-md-4">4 of 4</div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">1 of 2</div>
+                <div class="col-md-4">2 of 2</div>
+            </div>
+        </div>
+
+    </div> // className="App" 닫는 div
+
+    ); // return 닫는 괄호
+    } // render 닫는 괄호
+} // 클래스 컴포넌트 닫는 괄호
+
+export default App;
+```
 -----
 
 # Container에 컴포넌트 추가하기

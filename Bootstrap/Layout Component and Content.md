@@ -395,3 +395,79 @@ export default App;
 ```
 
 ![image-7.png](./image-7.png)
+
+## bootstrap의 Border
+
+### Display 유틸리티
+
+부트스트랩의 디스플레이 유틸리티를 사용하여 컴포넌트가 보여지는 속성 등을 빠르고 신속하게 전환할 수 있습니다.
+
+*여기서 디스플레이 유틸리티란 부트스트랩에서 제공하는 비교적 작은 범주의 컴포넌트라고 이해하면 됩니다.
+
+반응형 디스플레이 클래스를 사용하여 표시 할 수 있는 모든 컴포넌트의 일부만 의도적으로 보여줄 수 있습니다. 필요에 따라 다양한 효과를 위해 클래스를 결합 할 수 있습니다.
+
+### Border
+
+Border를 사용하여 컴포넌트의 테두리, 반경, 스타일등을 빠르게 지정할 수 있습니다. 이미지, 버튼, 텍스트 또는 기타 요소에 적합합니다.
+
+#### 지시사항
+
+1. App.js 파일 내 App 클래스 내 ```<div className="App">``` 내에 d-inline으로 컴포넌트를 가로로 배치하는 코드를 입력하세요.
+2. Display 속성(d-block)으로 컴포넌트(텍스트)를 세로로 배치하세요.
+3. 다음 코드로 테두리(Border) 색 설정하세요.
+4. 테두리(Radius) 반경을 설정하세요.
+
+#### 실습 코드
+```
+import React from 'react';
+import './App.css';
+import { Component} from 'react';
+import './bootstrap.min.css';
+import './bootstrap-grid.css';
+import './bootstrap-grid.min.css';
+
+class App extends React.Component {
+render() {
+  return (
+    <div className="App">
+        <h1 className="title">Hello, React!</h1>
+        
+        <div class ="padd">/**Component Display 가로*/</div>
+        <div class="d-inline p-2 bg-primary text-white">a-inline</div>
+        <div class="d-inline p-2 bg-dark text-white">b-inline</div>
+        <span class="d-inline p-2 bg-primary text-white">a-inline</span>
+        <span class="d-inline p-2 bg-dark text-white">b-inline</span>
+
+        <div class ="padd">/**Component Display 세로*/</div>
+        <div class="d-block p-2 bg-primary text-white">a-block</div>
+        <div class="d-block p-2 bg-dark text-white">b-block</div>
+        <span class="d-block p-2 bg-primary text-white">a-block</span>
+        <span class="d-block p-2 bg-dark text-white">b-block</span>
+        
+        <div class ="padd">/**Border 색 정하기*/</div>
+        <span class="border border-primary"></span>
+        <span class="border border-secondary"></span>
+        <span class="border border-success"></span>
+        <span class="border border-danger"></span>
+        <span class="border border-warning"></span>
+        <span class="border border-info"></span>
+        <span class="border border-light"></span>
+        <span class="border border-dark"></span>
+        <span class="border border-white"></span>
+
+        <div class ="padd">/**Border radius 정하기*/</div> 
+        <img src="..." class="rounded" alt="..."/>
+        <img src="..." class="rounded-top" alt="..."/>
+        <img src="..." class="rounded-right" alt="..."/>
+        <img src="..." class="rounded-bottom" alt="..."/>
+        <img src="..." class="rounded-left" alt="..."/>
+        <img src="..." class="rounded-circle" alt="..."/>
+        <img src="..." class="rounded-pill" alt="..."/>
+        <img src="..." class="rounded-0" alt="..."/>
+    </div>
+  );
+}
+}
+
+export default App;
+```

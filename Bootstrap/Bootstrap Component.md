@@ -376,5 +376,122 @@ Container 안에 여러 개의 row가 들어갈 수도 있습니다.
  </div> 
  ```
 
+## Bootstrap의 Navbar 와 Dropdown 만들기 실습
+
+Bootstrap의 반응형 컴포넌트 중 하나면서 헤더에서 많이 사용되는 Navbar는 드롭다운 메뉴와 검색창(search bar)등의 기능이 포함됩니다. 
+
+Navbar는 반응형이면서도 쉽게 수정할 수 있습니다. 
+
+큰 화면에서는 가로로 표시되고 소형 및 모바일 화면 (768px 이하)에서는 “햄버거” 드롭다운 메뉴로 변환됩니다. 
+
+내부적으로 navbar는 메뉴 항목의 정렬되지 않은 인라인 목록이며 원하는대로 추가 된 HTML 요소가 추가됩니다. 
+
+추가 가능한 항목 중에는 브랜딩 (텍스트 또는 로고), 검색 창과 같은 양식 항목 및 메뉴 드롭다운이 있습니다.
+
+### 지시사항
+
+1. Navbar 의 우선순위는 이렇게 됩니다.
+
+먼저 navbar-brand 내비게이션에 가장 크게 찍힐 회사, 제품 또는 프로젝트 이름 등 을 넣으세요.
+
+2. 그 다음 아래 코드 처럼 navbar-nav 로 전체 높이를 정한 다음 toggler동작을 ```<body></body>```안에 추가해보세요.
+```
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<a class="navbar-brand" href="#">회사, 제품 또는 프로젝트 이름</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" label="Toggle navigation">  </button>
+<div class="collapse navbar-collapse" id="navbarNavDropdown">
+<ul class="navbar-nav">
+<li class="nav-item active">
+<a class="nav-link" href="#">Home</a>
+</li>
+</ul>
+</div>
+</nav>
+```
+
+navbar nav에서 드롭 다운을 사용할 수도 있습니다. 
+
+드롭 다운 메뉴에는 배치를위한 래핑 요소가 필요하므로 아래와 같이 .nav-item 및 .nav-link에 대해 별도의 중첩 요소를 사용해야합니다.
+
+드랍다운 버튼을 이런식으로 추가해보세요.
+```
+<li class="nav-item dropdown">
+<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+Dropdown link
+</a>
+<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+<a class="dropdown-item" href="#">Action</a>
+<a class="dropdown-item" href="#">Another action</a>
+<a class="dropdown-item" href="#">Something else here</a>
+</div>
+</li>
+```
+
+> Tips : Navbar에는 몇 가지 하위 구성 요소에 대한 지원이 내장되어 있습니다. 필요에 따라 다음 중에서 선택하세요.
+
+- ```.navbar-brand``` : 회사, 제품 또는 프로젝트 이름 등
+- ```.navbar-nav``` : 전체 높이 및 내비게이션 (드롭 다운 지원 포함)
+- ```.navbar-toggler``` : 축소 플러그인 및 기타 내비게이션 토글 동작
+- ```.form-inline``` : 모든 form 양식 컨트롤 및 작업
+- ```.navbar-text``` : 가운데 세로로 정렬된 텍스트 문자열을 추가
+
+### 실습 코드
+```
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>.container vs .container-fluid</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+        <link rel = "stylesheet" 
+         href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+         integrity = "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" 
+         crossorigin = "anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">노하람 부트스트랩</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" label="Toggle navigation">
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">게시판 1</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">게시판 2</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    메뉴</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">액션1</a>
+                        <a class="dropdown-item" href="#">액션2</a>
+                        <a class="dropdown-item" href="#">액션3</a>
+                    </div>
+                </li>
+            </ul>
+            </div>
+        </nav>   
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+ 
+    </body>
+ 
+ 
+    <body>
+
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+   </body>
+</html>
+```
 
 

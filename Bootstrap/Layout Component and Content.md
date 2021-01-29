@@ -317,39 +317,81 @@ export default App;
 
 부트스트랩은 기본 전 타이포그래피 및 문단조절을 설정합니다. 
 
-타이포그래피의 많은 설정으로 alignment, heading, font 크기 등을 맞춤화 할 수 있습니다. 더 많은 스타일이 필요한 경우 bootstrap의 텍스트 유틸리티 클래스 documentation을 확인하십시오.
+타이포그래피의 많은 설정으로 alignment, heading, font 크기 등을 맞춤화 할 수 있습니다. 
 
-지시사항
-App.js 파일 내 App 클래스 내 <div className="App"> 내에 흐려지는 텍스트를 완성하는 코드를 입력하세요.
+더 많은 스타일이 필요한 경우 bootstrap의 텍스트 유틸리티 클래스 documentation을 확인하십시오.
+
+#### 지시사항
+
+1. App.js 파일 내 App 클래스 내 ```<div className="App">``` 내에 흐려지는 텍스트를 완성하는 코드를 입력하세요.
+```
 <h3>
   Fancy display heading
   <small class="text-muted">With faded secondary text</small>
 </h3>
-Copy
-디스플레이 헤딩을 사용해보세요
-<h1 class="display-1">Display 1</h1>
-<h1 class="display-2">Display 2</h1>
-<h1 class="display-3">Display 3</h1>
-<h1 class="display-4">Display 4</h1>
-<h1 class="display-5">Display 5</h1>
-<h1 class="display-6">Display 6</h1>
-Copy
-html 텍스트 효과 다양하게 활용해보세요
-<p> 마크 태그를 사용하여 텍스트를<mark> 강조 표시 </ mark> 할 수 있습니다.</p>
-<p><del>이 문장은 삭제된 텍스트로 취급됩니다.</del></p>
-<p><s>이 문장은 더 이상 정확하지 않은 것으로 간주됩니다. </s></p>
-<p> <ins>이 문장은 문서에 추가된 것으로 취급됩니다. </ ins></ p>
-<p><u>이 줄 밑줄로 표시됩니다. </u></p>
-<p><small>이  문장은 작은 글씨로 처리됩니다. </small></p>
-<p><strong>이 줄은 bold 텍스트로 렌더링되었습니다. </strong></p>
-<p><em>이 줄은 italic 텍스트로 렌더링되었습니다. </em></p>
-Copy
-blockquote로 text alignment(텍스트 위치)를 다르게 해보세요.
-<blockquote class="blockquote text-center">
-  <p class="mb-0">>A well-known quote, contained in a blockquote element.</p>
-  <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-</blockquote>
-<blockquote class="blockquote text-left">
-  <p class="mb-0">A well-known quote, contained in a blockquote element.</p>
-  <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-</blockquote>
+```
+
+2. 디스플레이 헤딩을 사용해보세요
+
+3. html 텍스트 효과 다양하게 활용해보세요
+
+4. blockquote로 text alignment(텍스트 위치)를 다르게 해보세요.
+
+#### 실습 코드
+```
+import React from 'react';
+import './App.css';
+import './bootstrap.min.css';
+import './bootstrap-grid.css';
+import './bootstrap-grid.min.css';
+
+class App extends React.Component {
+render() {
+  return (
+    <div className="App">
+        <h1 className="title">Hello, React!</h1>
+
+        <h3>
+            <p>흐린 텍스트 처리</p>
+            Fancy display heading
+            <small class="text-muted">With faded secondary text</small>
+        </h3>
+
+        <p>디스플레이 헤딩 예시</p>
+        <h1 class="display-1">Display 1</h1>
+        <h1 class="display-2">Display 2</h1>
+        <h1 class="display-3">Display 3</h1>
+        <h1 class="display-4">Display 4</h1>
+        <h1 class="display-5">Display 5</h1>
+        <h1 class="display-6">Display 6</h1>
+
+        <p>html 텍스트 효과</p>
+        <p> 마크 태그를 사용하여 텍스트를<mark> 강조 표시 </ mark> 할 수 있습니다.</p>
+        <p><del>이 문장은 삭제된 텍스트로 취급됩니다.</del></p>
+        <p><s>이 문장은 더 이상 정확하지 않은 것으로 간주됩니다. </s></p>
+        <p> <ins>이 문장은 문서에 추가된 것으로 취급됩니다. </ ins></ p>
+        <p><u>이 줄 밑줄로 표시됩니다. </u></p>
+        <p><small>이  문장은 작은 글씨로 처리됩니다. </small></p>
+        <p><strong>이 줄은 bold 텍스트로 렌더링되었습니다. </strong></p>
+        <p><em>이 줄은 italic 텍스트로 렌더링되었습니다. </em></p>
+
+        <p>텍스트 정렬</p>
+        <blockquote class="blockquote text-center">
+            <p class="mb-0">중앙정렬.</p>
+            <footer class="blockquote-footer">footer <cite title="Source Title">Source Title</cite></footer>
+        </blockquote>
+        <blockquote class="blockquote text-left">
+            <p class="mb-0">왼쪽정렬.</p>
+            <footer class="blockquote-footer">footer in <cite title="Source Title">Source Title</cite></footer>
+        </blockquote>
+    </div>
+   
+ 
+  );
+}
+}
+
+export default App;
+```
+
+![image-7.png](./image-7.png)

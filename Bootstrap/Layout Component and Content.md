@@ -471,3 +471,137 @@ render() {
 
 export default App;
 ```
+
+## bootstrap의 stretched-link
+
+stretched-link는 CSS를 통해 중첩된 부분을 확장하여 HTML 요소 또는 부트 스트랩 구성 요소를 클릭 할 수 있도록합니다.
+
+예를들어 실습1에서 만들었던 카드를 가로로 늘리거나 줄일 수 있습니다.
+
+카드는 부트 스트랩에서 기본적으로 위치 : 상대적이므로이 경우 다른 HTML 변경없이 카드의 링크에 .stretched-link 클래스를 안전하게 추가 할 수 있습니다.
+
+#### 지시사항
+1. App.js 파일 내 App 클래스 내 ```<div className="App">``` 내에 이미 만들어진 카드 아래 stretched-link를 사용하는 코드를 입력하세요.
+
+#### 실습 코드
+```
+import React from 'react';
+import './App.css';
+import './bootstrap.min.css';
+import './bootstrap-grid.css';
+import './bootstrap-grid.min.css';
+
+
+
+class App extends React.Component {
+render() {
+  return (
+    <div className="App">
+        <h1 className="title">Hello, React!</h1>   
+        <div class="card">
+            <img class="card-img-top" src='20140409_230641.jpg' alt="elice"/>
+            
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="/" class="btn btn-primary">Go somewhere</a>
+
+                <div class="card2">
+                    <div class="row no-gutters position-relative">
+                        <img class="card-img-bot" src="20140409_230641.jpg" alt="elice"/>
+                        <div class="col-md-6 position-static p-4 pl-md-0">
+                            <h5 class="mt-0">Columns with stretched link</h5>
+                            <p>(컨텐츠 내용) another instance of placeholder content for this other custom component. It is intended to mimic what some real-world content would look like, and we're using it here to give the component a bit of body and size.</p>
+                            <a href="#" class="stretched-link">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  );
+}
+}
+
+export default App;
+```
+
+## bootstrap의 Spinner
+
+부트스트랩 Spinner 를 사용하여 프로젝트/웹페이지의 로딩 상태를 표시 할 수 있습니다. 
+
+Spinner는 사용자에게 편리한 UI를 만들기 위해 프론트엔드에 필수적으로 적용되는 컴포넌트입니다. 
+
+HTML 및 CSS로만 제작되므로 자바 스크립트가 필요하지 않습니다. 그러나 가시성을 전환하려면 사용자 정의 JavaScript가 필요합니다. 
+
+뛰어난 유틸리티 클래스를 사용하여 모양, 정렬 및 크기를 쉽게 사용자 지정할 수 있습니다.
+
+#### 지시사항
+- App.js 파일 내 App 클래스 내 ```<div className="App">``` 내에 Spinner 만드는 코드를 입력하세요.
+1. Spinner 만들기
+
+#### 실습 코드
+```
+import React from 'react';
+import './App.css';
+import './bootstrap.min.css';
+import './bootstrap-grid.css';
+import './bootstrap-grid.min.css';
+
+
+
+class App extends React.Component {
+render() {
+  return (
+    <div className="App">
+        <h1 className="title">Hello, React!</h1>
+   
+<div class="padd">Spinner를 만드세요</div>
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-border text-secondary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-border text-success" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-border text-danger" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-border text-warning" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-border text-info" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-border text-light" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-border text-dark" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+
+
+<div class="padd">로딩 버튼을 만드세요</div>
+    <button class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="sr-only">Loading...</span>
+    </button>
+    <button class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Loading...
+    </button>
+
+
+    </div>
+  
+   
+ 
+
+  );
+}
+}
+
+export default App;
+```

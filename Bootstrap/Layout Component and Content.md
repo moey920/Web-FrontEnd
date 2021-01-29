@@ -185,5 +185,171 @@ export default App;
 ```
 ![image-5.png](./image-5.png)
 
+## bootstrap의 List-group과 테이블
 
+### List 개념
 
+기본 목록 그룹을 만들려면 .list-group 클래스가있는 ul 와 .list-group-item 클래스가있는 li 를 사용합니다. 
+
+> 간단히 말해 리스트 아이템인 li 태그 그룹을 ul 태그로 묶는 것입니다.
+
+### Table 개념
+
+Bootstrap 4 테이블은 게시판 글 목록이나 차트를 표현할때 유용합니다. .table 클래스는 테이블에 기본 스타일을 추가합니다.
+
+#### 지시사항
+
+##### List group 띄우기
+
+1/ App.js 파일 내 App 클래스 내 ```<div className="App">``` 내에 list group의 기본적인 형태를 만드는 코드를 입력하세요.
+```
+   <div class="list-group">
+  <a href="/" class="list-group-item list-group-item-action active">
+    Cras justo odio
+  </a>
+  <a  class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+```
+2. ```<a class="list-group-item list-group-item-action"></a>``` 태그에 링크를 이렇게 걸어보세요
+```
+<a  href="www.elice.com" class="list-group-item list-group-item-action">
+```
+
+##### table 띄우기
+
+1. 다음 형식을 활용해서 글 목록 테이블을 만들어 보세요.
+```
+ <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">제목</th>
+      <th scope="col">작성자</th>
+      <th scope="col">날짜</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>  
+      <td>공지글</td>
+      <td>Mark </td>
+      <td>20.12.23</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>뮤직 리뷰</td>
+      <td>Thom Yorke</td>
+      <td>20.11.23</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td colspan="2">평론가 리뷰</td>
+      <td>21.1.10</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+#### 실습 코드
+```
+import React from 'react';
+import './App.css';
+import './bootstrap.min.css';
+import './bootstrap-grid.css';
+import './bootstrap-grid.min.css';
+
+class App extends React.Component {
+render() {
+  return (
+    <div className="App">
+        <h1 className="title">Hello, React!</h1>
+        
+        <div class = "padd">list를 만드세요 </div>
+            <div class="list-group">
+                <a href="/" class="list-group-item list-group-item-action active">
+                    Cras justo odio
+                </a>
+                <a href="www.elice.com" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+            </div>
+
+        <div class = "padd">테이블을 입력하세요 </div>
+         <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                        <td>공지글</td>
+                        <td>Mark </td>
+                        <td>20.12.23</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                        <td>뮤직 리뷰</td>
+                        <td>Thom Yorke</td>
+                        <td>20.11.23</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                        <td colspan="2">평론가 리뷰</td>
+                        <td>노하람</td>
+                        <td>21.01.10</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  );
+}
+}
+
+export default App;
+```
+![image-6.png](./image-6.png)
+
+## bootstrap의 Typography 활용
+
+### Typography 개념
+
+부트스트랩은 기본 전 타이포그래피 및 문단조절을 설정합니다. 
+
+타이포그래피의 많은 설정으로 alignment, heading, font 크기 등을 맞춤화 할 수 있습니다. 더 많은 스타일이 필요한 경우 bootstrap의 텍스트 유틸리티 클래스 documentation을 확인하십시오.
+
+지시사항
+App.js 파일 내 App 클래스 내 <div className="App"> 내에 흐려지는 텍스트를 완성하는 코드를 입력하세요.
+<h3>
+  Fancy display heading
+  <small class="text-muted">With faded secondary text</small>
+</h3>
+Copy
+디스플레이 헤딩을 사용해보세요
+<h1 class="display-1">Display 1</h1>
+<h1 class="display-2">Display 2</h1>
+<h1 class="display-3">Display 3</h1>
+<h1 class="display-4">Display 4</h1>
+<h1 class="display-5">Display 5</h1>
+<h1 class="display-6">Display 6</h1>
+Copy
+html 텍스트 효과 다양하게 활용해보세요
+<p> 마크 태그를 사용하여 텍스트를<mark> 강조 표시 </ mark> 할 수 있습니다.</p>
+<p><del>이 문장은 삭제된 텍스트로 취급됩니다.</del></p>
+<p><s>이 문장은 더 이상 정확하지 않은 것으로 간주됩니다. </s></p>
+<p> <ins>이 문장은 문서에 추가된 것으로 취급됩니다. </ ins></ p>
+<p><u>이 줄 밑줄로 표시됩니다. </u></p>
+<p><small>이  문장은 작은 글씨로 처리됩니다. </small></p>
+<p><strong>이 줄은 bold 텍스트로 렌더링되었습니다. </strong></p>
+<p><em>이 줄은 italic 텍스트로 렌더링되었습니다. </em></p>
+Copy
+blockquote로 text alignment(텍스트 위치)를 다르게 해보세요.
+<blockquote class="blockquote text-center">
+  <p class="mb-0">>A well-known quote, contained in a blockquote element.</p>
+  <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+</blockquote>
+<blockquote class="blockquote text-left">
+  <p class="mb-0">A well-known quote, contained in a blockquote element.</p>
+  <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+</blockquote>

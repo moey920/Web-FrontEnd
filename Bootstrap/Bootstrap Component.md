@@ -95,13 +95,16 @@ Bootstrap에서는 아래의 규칙대로 이러한 그리드 시스템을 구�
 
 Bootstrap에서 사용할 수 있는 컴포넌트는 Alerts, Badge, Button, Card, Dropdown, Forms, Input group, List group, Navbar, Navs 등 매우 다양합니다.
 
-그 중에 Navbar로 예를 들어보겠습니다. Navbar는 애플리케이션 또는 사이트에 대한 탐색 헤더를 제공합니다. Navbar는 모바일보기에서 축소되고 사용 가능한 뷰포트 너비가 증가함에 따라 수평이 되어 편리합니다.
+그 중에 Navbar로 예를 들어보겠습니다. Navbar는 애플리케이션 또는 사이트에 대한 탐색 헤더를 제공합니다. 
 
-아주 간단한 navbar를 생성하려면 반응 형 축소 클래스 .navbar-expand-xl | lg | md | sm (초대형, 대형, 중형 또는 소형 화면)이 있는 .navbar 클래스를 추가하세요.
-navbar에 링크를 추가하려면 .navbar-nav 클래스를 사용하여 정렬되지 않은 목록을 추가하면됩니다.
-각 개별 목록 항목을 정의하려면 <li>태그 클래스에 .nav-item 클래스를 추가하고 개별 링크의 <a> 태그 클래스에 .nav-link 클래스를 사용합니다.
-Navbar 예시
+Navbar는 모바일 보기에서 축소되고 사용 가능한 뷰포트 너비가 증가함에 따라 수평이 되어 편리합니다.
 
+- 아주 간단한 navbar를 생성하려면 반응형 축소 클래스 .navbar-expand-xl | lg | md | sm (초대형, 대형, 중형 또는 소형 화면)이 있는 .navbar 클래스를 추가하세요.
+- navbar에 링크를 추가하려면 .navbar-nav 클래스를 사용하여 정렬되지 않은 목록을 추가하면됩니다.
+- 각 개별 목록 항목을 정의하려면 ```<li>```태그 클래스에 .nav-item 클래스를 추가하고 개별 링크의 ```<a>``` 태그 클래스에 .nav-link 클래스를 사용합니다.
+
+## Navbar 예시
+```
       <div class="container">
          <h2>Basic Navbar</h2>
          <nav class="navbar navbar-expand-sm navbar-dark bg-secondary">
@@ -124,7 +127,140 @@ Navbar 예시
             </div>
          </nav>
       </div>
-결과 화면
-image
+```
 
-Bootstrap4의 더 많은 컴포넌트들의 응용방법 확인하기 →
+결과 화면
+
+![image-2.png](./image-2.png)
+
+Bootstrap4의 더 많은 컴포넌트들의 응용방법 확인하기 → <https://getbootstrap.com/docs/4.0/components/buttons/>
+
+
+# Bootstrap 레이아웃 - Container
+
+Container는 레이아웃을 만드는 가장 상위 요소에 들어갑니다.
+
+앞서 이론1에서 배운 그리드 시스템이 레이아웃을 결정짓는 큰 범주 였다면 그 외에 모든 컴포넌트와 웹을 구성하는 모든 컨텐츠들을 배치할수 있게 도와주는 것이 레이아웃 시스템입니다. 
+
+부트스트랩의 수십개의 유틸리티 클래스가 콘텐츠 표시, 숨기기, 정렬 및 간격 조정을 할수 있습니다.
+
+**container 클래스**는 **고정 된 너비로 페이지 콘텐츠를 감싸는 데 사용**되며 아래와 같이 .container 클래스를 사용하여 콘텐츠를 중앙에 쉽게 배치 할 수 있습니다.
+```
+<div class = "container">
+   ...
+</div>
+```
+
+Bootstrap 4는 컨테이너 클래스를 사용하여 페이지의 내용을 래핑합니다. 그 종류에는 fixed와 fluid 2가지가 있습니다.
+
+```.container``` : 고정된 너비 컨테이너를 나타냅니다.
+```.container-fluid``` : 뷰포트의 전체 너비에 걸쳐 컨테이너를 나타냅니다.
+
+1. container는 Media query에 의해 반응형을 동작합니다.
+
+   가로 해상도 767px 이하에서는 100%
+
+   768px 이상에서는 750px
+
+   992px 이상에서는 970px
+
+   1200px 이상에서는 1170px의 가로폭을 가집니다.
+
+2. container-fluid는 가로 해상도에 상관없이 100%의 width를 가집니다.
+```
+<body>
+  <div class="container">
+    <div class="fixed">fixed width (.container)</div>
+  </div>
+  <br>
+  <div class="container-fluid">
+    <div class="fluid">full width (.container-fluid)</div>
+  </div>
+</body>
+```
+
+# Grid 레이아웃시스템
+
+Bootstrap 4부터 Grid 레이아웃시스템이 더 정교하고 세밀하게 발전했습니다.
+
+- 화면의 너비를 12 분할하는 것은 동일하지만 반응하는 화면의 기준너비는 4가지 에서 5가지로 세분화되었습니다.
+- 숫자 명시없이 ```<div classs="col">```의 갯수에 따라 자동 분할합니다.
+
+예를들어 아래와 같이 입력하면 2등분이 되는 것 입니다.
+```
+<div class="col">
+
+      1 of 2
+
+</div>
+
+<div class="col">
+
+      2 of 2
+
+</div>
+```
+
+다음과 같이 페이지를 만들어 봅시다
+```
+<div class="container">
+  <div class="row">
+    <div class="col">
+
+      1 of 3
+
+    </div>
+
+    <div class="col">
+
+      2 of 3
+
+    </div>
+
+    <div class="col">
+
+      3 of 3
+
+    </div>
+  </div>
+</div>
+```
+
+이렇게 하면 576px 미만의 브라우저 너비부터 최대너비크기까지 3등분이 되겠죠?
+
+어떤 브라우저 너비로 보던 모두 3등분되는 것입니다.
+
+Container 안에 여러 개의 row가 들어갈 수도 있습니다.
+```
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+
+          1 of 3
+
+        </div>
+        <div class="col-md-4">
+
+          2 of 3
+
+        </div>
+        <div class="col-md-4">
+
+          3 of 3
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+
+          1 of 2
+
+        </div>
+        <div class="col-md-6">
+
+          2 of 2
+
+        </div>
+    </div>
+ </div> 
+ ```

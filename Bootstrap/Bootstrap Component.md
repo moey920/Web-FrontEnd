@@ -179,6 +179,43 @@ Bootstrap 4는 컨테이너 클래스를 사용하여 페이지의 내용을 래
 </body>
 ```
 
+```
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>.container vs .container-fluid</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+         <link rel = "stylesheet" 
+         href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+         integrity = "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" 
+         crossorigin = "anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <div class="fixed">fixed width(.container)</div>
+            <h2>Fixed Width Container</h2>
+            <code>.container</code> class로 고정된 컨테이너를 만들어봅시다
+        </div>
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    </body>
+ 
+ 
+    <body>
+    <div class="container-fluid">
+        <div class="fluid">fixed width(.container-fluid)</div>
+        <h2>Full Width Container</h2>
+        <code></code> class로 늘어날 수 있는 컨테이너입니다.
+    </div>
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+   </body>
+</html>
+```
+![image-3.png](./image-3.png)
+
 # Grid 레이아웃시스템
 
 Bootstrap 4부터 Grid 레이아웃시스템이 더 정교하고 세밀하게 발전했습니다.
@@ -264,3 +301,6 @@ Container 안에 여러 개의 row가 들어갈 수도 있습니다.
     </div>
  </div> 
  ```
+
+
+

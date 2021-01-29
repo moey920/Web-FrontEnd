@@ -494,4 +494,134 @@ Dropdown link
 </html>
 ```
 
+# React bootstrap의 Carousel 만들기 실습(슬라이드 기능)
 
+## Carousel 개념
+
+Carousel (캐러샐)은 이미지 또는 텍스트 슬라이드를 순환하는 부트스트랩의 구성 요소입니다.
+
+캐러셀은 CSS 3D 변환과 약간의 자바 스크립트로 제작 된 일련의 콘텐츠를 순환하는 슬라이드로 일련의 이미지, 텍스트 또는 사용자 정의 마크 업과 함께 작동합니다. 
+
+또한 이전 / 다음 컨트롤 및 표시에 대한 지원도 포함합니다.
+
+## Carousel 사용하기
+
+Carousel은 제품을 홍보하거나 포트폴리오를 보여주는 웹페이지 등에 유용하게 쓰입니다.
+
+대체로 다음 상황에 해당될 때 유용합니다.
+
+- 여러 항목의 이미지를 슬라이드 처럼 나타낼 때
+- 슬라이더를 한 번에 하나씩 만 진행할 때
+- 비교적 작은 화면에 단일 항목만 나타날 때
+
+### 지시사항
+
+가장 기본적인 형태의 carousel 슬라이드쇼를 만드세요.
+```
+ <!-- The slideshow -->
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="portugal.jpeg" alt="Los Angeles" width="1100" height="500">
+    </div>
+    <div class="carousel-item">
+      <img src="paris2.jpeg" alt="Chicago" width="1100" height="500">
+    </div>
+    <div class="carousel-item">
+      <img src="nyc.jpeg" alt="New York" width="1100" height="500">
+    </div>
+  </div>
+```
+
+그 다음은 이전과 다음 버튼을 만들어보세요.
+```
+ <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+```
+
+몇번째 페이지인지 암시하는 page indicator를 추가해 보세요.
+```
+  <ul class="carousel-indicators">
+    <li data-target="#demo" data-slide-to="0" class="active"></li>
+    <li data-target="#demo" data-slide-to="1"></li>
+    <li data-target="#demo" data-slide-to="2"></li>
+  </ul>
+```
+
+슬라이드쇼 아이템에 대한 간단한 설명을 caption으로 추가하세요.
+```
+<div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="..." class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>First slide label</h5>
+        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+      </div>
+    </div>
+```
+
+### 실습 코드
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+    /* Make the image fully responsive */
+    .carousel-inner img {
+        width: 100%;
+        height: 100%;
+    }
+    </style>
+</head>
+<body>
+
+    <div id="demo" class="carousel slide" data-ride="carousel">
+
+        <!-- Indicators -->
+        <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1" class="active"></li>
+            <li data-target="#demo" data-slide-to="2" class="active"></li>
+        </ul>
+        
+        <!-- Carousel 슬라이드쇼를 만드세요 -->
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="portugal.jpeg" class="d-block w-100" alt="Los Angeles" width="1100" height="500">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>First slide label</h5>
+                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="paris2.jpeg" alt="Chicago" width="1100" height="500">
+            </div>
+            <div class="carousel-item">
+                <img src="nyc.jpeg" alt="New York" width="1100" height="500">
+            </div>
+        </div>
+
+        
+        <!-- 이전 다음 버튼을 만드세요 -->
+         <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+
+</body>
+</html>
+```

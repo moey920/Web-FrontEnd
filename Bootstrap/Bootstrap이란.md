@@ -184,7 +184,82 @@ npm이나 yarn으로 리액트 환경 안에서 react-bootstrap을 설치하면 
 
 - my-app
     - node_modules : npm을 설치할 때 형성된 dir. 초기 작동 반응 앱에 필요한 모든 dependencies를 포함합니다.
-    - package.json : 프로젝트와 관련된 다양한 메타 데이터 포함, 프로젝트에서 사용되는 dependencies를 지정하여 npm이 프로젝트의 다른 컴퓨터에서 
+    - package.json : 프로젝트와 관련된 다양한 메타 데이터 포함, 프로젝트에서 사용되는 dependencies를 지정하여 npm이 프로젝트의 다른 컴퓨터에서 동일한 환경을 설정하도록 도와준다.
     - ...
     - public
-        - index.html
+        - index.html : 앱을 시작하기 위해 시작 스크립트를 실행할 때 제공되는 템플릿 파일. 공용 폴더에 여러 html파일을 만들지 않는 것이 가장 좋다. 대신 이 파일을 사용하고 이 파일의 루트 div 컨테이너에 반응 구성 요소를 삽입한다. 다른 CSS 라이브러리 등이 파일에 정의될 수 있다.
+        - ...
+    - src
+        - App.js : 이 파일에는 자체 루트 구성 요소를 대체할 수 있는 매우 기본적인 반응형 컴포넌트가 정의되어 있다.
+        - index.js : 이 파일은 초기에 생성될 컴포넌트를 렌더링하고 서비스 워커를 등록한다.
+        - ... : Contact.js, Form.js, Home.js, NoMatch.js 는 웹페이지를 작게 쪼개어 간편하게 rander하기 위해 만든 js파일
+
+### npm 실행하기
+react창을 열어보기 위해서는
+1. cd my-app
+2. npm start
+
+
+# Bootstrap vs React-Bootstrap
+
+react-bootstrap은 Jquery 기반의 Bootstrap 를 React 환경으로 이식한 프로젝트입니다. 
+
+기존의 **<div> 엘리먼트에 Class를 설정하여 컴포넌트를 구분**하는 방식에서 
+
+**Bootstrap 컴포넌트별로 React 컴포넌트가 구현**되어 더욱 리액트 환경에 맞는 개발이 가능합니다.
+
+간단히 말해 react-bootstrap이 bootstrap에 비해 react에 더 최적화되어 빠르게 만들 수 있습니다.
+
+또한, 이렇게 이해하셔도 됩니다.
+
+- React: 웹사이트를 build하기 위해 사용되는 프레임워크
+- Bootstrap: 웹의 반응형 UI를 만들기 위한 html/CSS 프레임워크
+- React-bootstrap: 이 둘을 (따로 부트스트랩 설치 없이) 수행하기 위한 프레임워크
+
+## React-Bootstrap 특징
+
+- React-Bootstrap은 HTML 요소 정렬의 중복을 제거하고 대신 순수한 JavaScript를 사용하여 React가 페이지 렌더링을 완전히 인수하도록합니다.
+- React Bootstrap은 Boostrap의 기능이 통합 된 React 프레임 워크이지만 표준 Boostrap 라이브러리 (특히 JQuery)에서 사용하는 모든 기본 구성 요소를 사용할 필요가 없습니다.
+- React-Bootstrap은 React와 함께 진화하고 성장하여 UI 기반으로 탁월한 CSS Framework가 되었습니다.
+
+간단한 드롭 다운 버튼을 만들때 Bootstrap과 React-Bootstrap의 차이를 알아보겠습니다.
+
+1. Bootstrap:
+```
+<div class="btn-group"> 
+ <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+ Action <span class="caret"></span> 
+ </button> 
+ <ul class="dropdown-menu"> 
+ <li><a href="#">Action</a></li> 
+ <li><a href="#">Another action</a></li> 
+ <li><a href="#">Something else here</a></li> 
+ <li role="separator" class="divider"></li> 
+ <li><a href="#">Separated link</a></li> 
+ </ul> 
+```
+2. React-Bootstrap:
+```
+function renderDropdownButton(title, i) { 
+ return ( 
+ <DropdownButton bsStyle={title.toLowerCase()} title={title} key={i} id={`dropdown-basic-${i}`}> 
+ <MenuItem eventKey="1">Action</MenuItem> 
+ <MenuItem eventKey="2">Another action</MenuItem> 
+ <MenuItem eventKey="3" active>Active Item</MenuItem> 
+ <MenuItem divider /> 
+ <MenuItem eventKey="4">Separated link</MenuItem> 
+ </DropdownButton> 
+ ); 
+} 
+const buttonsInstance = ( 
+ <ButtonToolbar>{renderDropdownButton}</ButtonToolbar> 
+); 
+
+ReactDOM.render(buttonsInstance, mountNode); 
+```
+
+React-Bootstrap은 부트스트랩의 재사용 가능한 구성 요소로 캡슐화하여 반복되는 html 태그를 줄입니다.
+
+또한, 코드 내비게이션을 원활하게하여 구조를 단순화고 앞으로 구현해야될 코드양이 적습니다.
+
+

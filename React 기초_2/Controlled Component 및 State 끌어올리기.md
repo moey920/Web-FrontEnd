@@ -238,3 +238,233 @@ ReactDOM.render(<EssayForm />,document.getElementById('root'));
 
 serviceWorker.unregister();
 ```
+
+#### select 태그
+
+```<select> 태그는 <option> 태그```와 함께 사용되며 드롭다운 목록을 생성합니다. ```<select>``` 태그의 value 값을 설정하여 초기에 선택되는 옵션을 설정합니다. 문법은 아래와 같습니다.
+```
+<select value="초기 선택 옵션" onChange={이벤트}>
+```
+select 태그 예시
+```
+<select value={this.state.value} onChange={this.handleChange}>
+  <option value="grapefruit">Grapefruit</option>
+  <option value="lime">Lime</option>
+  <option value="coconut">Coconut</option>
+  <option value="mango">Mango</option>
+</select>
+```
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+
+class YearOfBirth extends React.Component {
+  constructor(props) {
+    super(props);
+    // 초기 상태 값을 설정합니다.
+    this.state = {value: '1990'};
+    //정의한 이벤트를 바인딩합니다.
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('태어난 년도: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+  //form태그에 handleSubmit이벤트를 등록합니다.
+    return (
+      <form onSubmit={this.handleSubmit} >
+        <label>
+          태어난 년도를 선택하세요 : 
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="1960">1960~1969</option>
+            <option value="1970">1970~1979</option>
+            <option value="1980">1980~1989</option>
+            <option value="1990">1990~1999</option>
+            <option value="2000">2000~2009</option>
+            <option value="2010">2010~2019</option>
+            <option value="2020">2020~2029</option>
+          </select>
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+ReactDOM.render(<YearOfBirth />,document.getElementById('root'));
+
+
+
+serviceWorker.unregister();
+```
+
+#### 다중 입력
+
+사용자로부터 여러 입력값을 받을 때 다중입력을 사용합니다. 
+
+여러 ```<input>``` 엘리먼트를 제어해야 할 때, 각 엘리먼트별로 name 속성을 추가한 후 event.target.name 값을 통해 핸들러의 동작을 결정할 수 있습니다.
+
+> 다중 입력 폼
+
+```
+<form>
+  제목:
+  <input
+    name="checkData"
+    type="text"
+    checked={this.state.checkData}
+    onChange={this.handleInputChange} />
+<br />
+  내용:
+  <input
+    name="numberData"
+    type="text"
+    value={this.state.numberData}
+    onChange={this.handleInputChange} />
+</form>
+```
+
+> 입력 처리 이벤트
+
+```
+handleInputChange(event) {
+  const target = event.target;
+  const value = target.value;
+  const name = target.name;
+
+  this.setState({
+    [name]: value
+  })
+}
+```
+
+- 코드 설명
+
+동일한 이벤트를 사용해 두 개의 ```<input>``` 태그의 입력값을 처리하는 방법입니다. 
+
+태그마다 name을 지정하여 태그를 구분합니다. 이벤트 발생 시 name의 값을 기준으로 state의 값을 변경하여 입력값을 저장합니다.
+
+이를 참고하여 사용자로부터 이름과 나이를 입력받는 페이지를 작성해 봅시다. 이후, 개발자 도구를 통해 저장된 데이터를 확인해봅시다.
+
+> Tips : setState() 내에서 대괄호를 이용해 ```[name]: value```처럼 작성하면, 폼 내에 name별 값을 저장할 수 있습니다.
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+
+class Reservation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: ' ',
+      age: 20
+    };
+
+    //정의된 이벤트를 바인딩합니다.
+    this.handleInputChange = this.handleInputChange.bind(this)
+  }
+    
+  
+  handleInputChange(event) {
+  //입력된 데이터의 value와 name을 저장합니다.
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    //value 와 name을 사용해 입력받은 데이터를 state에 저장합니다.
+    this.setState({
+      [name]: value
+    });
+    console.log(this.state.name + ", " + this.state.age);
+  }
+
+  render() {
+  //이름을 입력받는 태그를 정의합니다.
+  //나이를 입력받는 태그를 정의합니다.
+    return (
+      <form>
+        <label>
+          이름 :  <input
+                    name="name"
+                    type="text"
+                    value={this.state.name}
+                    onChange={this.handleInputChange} />
+        </label>
+        <br />
+        <label>
+          나이 :  <input
+                    name="age"
+                    type="number"
+                    value={this.state.age}
+                    onChange={this.handleInputChange} />
+        </label>
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(<Reservation />,document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+
+#### Input Null 값 제어
+
+controlled component의 태그 내 value 값을 지정하면 사용자가 값을 변경할 수 없도록 제어할 수 있습니다.
+
+예를 들어, 아래처럼 ```<input>``` 태그의 값을 지정하면 사용자가 값을 변경할 수 없습니다.
+```
+<input value='haha' />
+```
+
+그러지 않고 value의 값을 null로 설정한다면 사용자가 값을 변경할 수 있습니다.
+```
+<input value={null} />
+```
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+//사용자가 수정할 수 있는 데이터와 수정할 수 없는 데이터를 설정합니다.
+const element = (
+    <fieldset>
+    <legend>개인정보 입력란</legend>
+        이름 : 
+        <input value='김지우' />
+        <br/>
+        주민등록번호 : 
+        <input value='971029-*******' />
+        <br/>
+        주소 : 
+        <input value={null} />
+        <br/>
+        전화번호 : 
+        <input value={null} />
+    </fieldset>
+)
+
+ReactDOM.render(element, document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+

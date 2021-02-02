@@ -468,6 +468,68 @@ ReactDOM.render(element, document.getElementById('root'));
 serviceWorker.unregister();
 ```
 
+## 3) State 끌어올리기
+
+여러 컴포넌트들에 데이터의 변화를 모두 반영해야 할 때, 각 컴포넌트의 state를 통합해야 합니다. 
+
+통합한 state는 가장 가까운 부모 컴포넌트가 관리해야 하는데, 이것을 state 끌어올리기하고 합니다. 
+
+state 끌어올리기는 종종 여러 컴포넌트에 동일한 데이터를 변경하고 반영하고 싶을 때, 공통된 부모 컴포넌트로 통합하고 관리하기 위해서 사용합니다.
+
+### 온도 계산 컴포넌트로 State 끌어올리기
+
+State 끌어올리기를 위한 예제를 만들어 봅시다. 온도의 단위는 화씨와 섭씨 두 가지가 있습니다. 
+
+두 단위 중 하나에 대해 온도를 입력받으면, 다른 단위로 변경하여 출력하고 입력된 온도가 물이 끓는 온도인지 확인하는 코드를 작성하려고 합니다.
+
+즉, 입력되는 온도 하나가 업데이트되면 온도의 출력과 물이 끓는 온도인지에 대한 출력 두 개가 동시에 업데이트되는 컴포넌트가 필요한 것입니다. 해당 state 끌어올리기 예제를 코드를 통해 알아보겠습니다.
+
+가장 먼저, BoilingVerdict라는 컴포넌트를 확인하겠습니다. 이 컴포넌트는 props로 celsius(섭씨) 온도를 받아 그 온도가 물이 끓을 수 있는 온도인지 나타내는 컴포넌트입니다.
+```
+function BoilingVerdict(props) {
+//100도에서 물이 끓음으로, props로 받은 온도가 끓을 수 있는 온도인지 확인
+  if (props.celsius >= 100) {
+    return <p>물이 끓습니다.</p>;
+  }
+  return <p>물이 끓지 않습니다.</p>;
+}
+```
+
+다음으로 확인해 볼 컴포넌트는 TemperatureInput으로 온도를 입력받아 화면에 표시합니다. 
+
+handleChange 이벤트에서 온도의 변화를 확인하며, **scale 변수는 화씨와 섭씨**를 나타냅니다.
+```
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.props.onTemperatureChange(e.target.value);
+  }
+
+  render() {
+    const temperature = this.props.temperature;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={temperature}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+```
+
+마지막으로 Calculator 컴포넌트에서 위의 두 컴포넌트에 대해 State 끌어올리기를 합니다. 
+
+여기서 render() 내 HTML을 확인해보면 온도의 변화에 대해 섭씨와 화씨에 따른 변환과 끓는점인지의 여부를 동시에 확인할 수 있도록 이벤트가 등록되어 있습니다.
+
+
+
+
 # 환율 변환 계산기 컴포넌트 제작
 
 그동안 익힌 내용을 바탕으로 환율 계산 페이지를 작성합니다. 페이지를 작성하는 절차는 크게 5가지로 나뉩니다.
@@ -631,3 +693,85 @@ serviceWorker.unregister();
 - tryConvert(): 문자열로 된 금액과 변환함수를 인자값으로 받아 환율을 계산한 후, 문자열로 결과를 반환하는 함수입니다.
 - calcKRW: 입력된 컴포넌트가 달러일 경우 환율 변환 함수를 호출합니다. 입력된 컴포넌트가 원화일 경우 그대로 money 값을 받습니다.
 - calcDollar: 입력된 컴포넌트가 원화일 경우 환율 변환 함수를 호출합니다. 입력된 컴포넌트가 달러일 경우 그대로 money 값을 받습니다.
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+const unitNames = {
+  K: '원화',
+  D: '달러'
+};
+
+//원화를 달러로 변경하는 toDollar 함수를 정의합니다.
+function toDollar(krw) {
+    return krw*0.00091;
+}
+
+//달러를 원화로 변경하는 toKRW 함수를 정의합니다.
+function toKRW(dollar) {
+    return dollar*1098.23;
+}
+
+// tryConvert : 문자열로 된 금액과 변환함수를 인자값으로 받아 환율을 계산한 후, 문자열로 결과를 반환하는 함수입니다.
+function tryConvert(temperature, convert) {
+  const input = parseFloat(temperature);
+  if (Number.isNaN(input)) {
+    return '';
+  }
+  const output = convert(input);
+  return output.toString();
+}
+
+class MoneyInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {money: ''};
+  }
+
+  handleChange(e) {
+    this.setState({money: e.target.value});
+  }
+
+  render() {
+    const unit = this.props.unit;
+    const money = this.state.money;
+    // 입력된 컴포넌트가 달러일 경우 환율 변환 함수를 호출합니다. 입력된 컴포넌트가 원화일 경우 그대로 money 값을 받습니다.
+    const calcKRW = unit === 'D' ? tryConvert(money, toKRW) : money;
+    const calcDollar = unit === 'K' ? tryConvert(money, toDollar) : money;
+    return (
+      <div>
+      <fieldset>
+        <legend>환율 계산기</legend>
+        {unitNames[unit]}: <input
+          value={money}
+          onChange={this.handleChange} />
+          
+      </fieldset>
+      원화: {calcKRW}
+      <br/>
+      달러: {calcDollar}
+      </div>
+    );
+  }
+}
+
+class Calculator extends React.Component {
+  render() {
+    return (
+      <div>
+        <MoneyInput unit="K" />
+        <MoneyInput unit="D" />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Calculator/>, document.getElementById('root'));
+```
+
+

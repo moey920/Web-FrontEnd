@@ -468,3 +468,150 @@ ReactDOM.render(element, document.getElementById('root'));
 serviceWorker.unregister();
 ```
 
+# 환율 변환 계산기 컴포넌트 제작
+
+그동안 익힌 내용을 바탕으로 환율 계산 페이지를 작성합니다. 페이지를 작성하는 절차는 크게 5가지로 나뉩니다.
+
+1. 원화 입력 컴포넌트 제작
+2. 달러 입력 필드 추가
+3. 환율 변환 함수 작성
+4. State 끌어올리기
+5. 두 필드 동기화
+
+이번 실습에서는 그 중 첫 번째 단계인 사용자로부터 값을 입력받는 원화 입력 컴포넌트 제작을 진행합니다.
+
+## 원화 입력 컴포넌트
+
+1. constructor() 메소드에서 money의 state를 빈 문자열로 초기화하고 handleChange 이벤트를 바인딩하세요.
+2. setState()를 이용해 사용자로부터 입력받은 원화를 money에 저장하는 handleChange 이벤트를 정의하세요.
+3. render() 메소드에서 원화를 입력받는 아래의 HTML 코드를 반환하세요.
+```
+<fieldset>
+<legend>환율 계산기</legend>
+원화: <input
+    value={this.state.money}
+    onChange={this.handleChange} />
+</fieldset>
+```
+4. MoneyInput 컴포넌트를 ReactDOM에 렌더링하세요.
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+// Calculator 클래스 컴포넌트를 정의합니다.
+class MoneyInput extends React.Component {
+  constructor(props) {
+    super(props);
+    // money의 state 초기화 및 이벤트 바인딩합니다.
+    this.state = {money: ' '};
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    // 입력받은 원화를 money에 저장합니다.
+    this.setState({money: event.target.value});
+  }
+
+  render() {
+    const KRW = this.state.money;
+    // 원화를 입력받는 아래의 HTML 코드를 반환합니다.
+    <fieldset>
+    <legend>환율 계산기</legend>
+    원화: <input
+        value={this.state.money}
+        onChange={this.handleChange} />
+    </fieldset>
+  };
+}
+
+
+//정의한 Calculator 컴포넌트를 ReactDOM에 렌더링합니다.
+ReactDOM.render(<MoneyInput />,document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+
+## 달러 입력 필드 추가
+
+이번 실습에서는 두 번째 단계인 **달러 입력 필드 추가**를 진행해 보겠습니다. 
+
+기존에 제작한 원화를 입력받는 컴포넌트 MoneyInput을 재사용하여 달러 입력 필드를 추가합니다.
+
+1. React.Component를 상속받는 Calculator 클래스 컴포넌트를 생성하세요.
+2. Calculator 컴포넌트의 render() 메소드 내에서 아래 HTML을 반환하세요.
+```
+    <div>
+        <MoneyInput unit="K" />
+        <MoneyInput unit="D" />
+    </div>
+```
+3. Calculator 컴포넌트를 ReactDOM에 렌더링합니다.
+
+> Tips
+- render()에서 반환되는 HTML은 MoneyInput을 2번 호출하여 2개의 입력 필드를 생성하고 있습니다. MoneyInput 호출 시, 원화와 달러를 구분하기 위해 props를 추가한 것입니다.
+  - 원화 props: unit="K"
+  - 달러 props: unit="D"
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+const unitNames = {
+  K: '원화',
+  D: '달러'
+};
+
+class MoneyInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {money: ''};
+  }
+
+  handleChange(e) {
+    this.setState({money: e.target.value});
+  }
+
+  render() {
+    const unit = this.props.unit;
+    return (
+      <fieldset>
+        <legend>환율 계산기</legend>
+        {unitNames[unit]}: <input
+          value={this.state.money}
+          onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+
+//Calculator 클래스 컴포넌트를 생성합니다.
+class Calculator extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    
+    render() {
+        return(
+                <div>
+                    <MoneyInput unit="K" />
+                    <MoneyInput unit="D" />
+                </div>
+        )
+    }
+}
+
+
+
+//정의한 Calculator 클래스를 ReactDOM에 렌더링합니다.
+ReactDOM.render(<Calculator />,document.getElementById('root'));
+
+serviceWorker.unregister();
+```

@@ -484,7 +484,9 @@ State 끌어올리기를 위한 예제를 만들어 봅시다. 온도의 단위�
 
 즉, 입력되는 온도 하나가 업데이트되면 온도의 출력과 물이 끓는 온도인지에 대한 출력 두 개가 동시에 업데이트되는 컴포넌트가 필요한 것입니다. 해당 state 끌어올리기 예제를 코드를 통해 알아보겠습니다.
 
-가장 먼저, BoilingVerdict라는 컴포넌트를 확인하겠습니다. 이 컴포넌트는 props로 celsius(섭씨) 온도를 받아 그 온도가 물이 끓을 수 있는 온도인지 나타내는 컴포넌트입니다.
+가장 먼저, BoilingVerdict라는 컴포넌트를 확인하겠습니다. 
+
+이 컴포넌트는 props로 celsius(섭씨) 온도를 받아 그 온도가 물이 끓을 수 있는 온도인지 나타내는 컴포넌트입니다.
 ```
 function BoilingVerdict(props) {
 //100도에서 물이 끓음으로, props로 받은 온도가 끓을 수 있는 온도인지 확인
@@ -523,9 +525,59 @@ class TemperatureInput extends React.Component {
 }
 ```
 
-마지막으로 Calculator 컴포넌트에서 위의 두 컴포넌트에 대해 State 끌어올리기를 합니다. 
+마지막으로 Calculator 컴포넌트(부모 컴포넌트)에서 위의 두 컴포넌트에 대해 State 끌어올리기를 합니다. 
 
 여기서 render() 내 HTML을 확인해보면 온도의 변화에 대해 섭씨와 화씨에 따른 변환과 끓는점인지의 여부를 동시에 확인할 수 있도록 이벤트가 등록되어 있습니다.
+
+```
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+    this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+    //temperature 값과 scale 값을 state로 할당
+    this.state = {temperature: '', scale: 'c'};
+  }
+
+//입력한 temperature 값을 scale에 따라 할당
+  handleCelsiusChange(temperature) {
+    this.setState({scale: 'c', temperature});
+  }
+
+  handleFahrenheitChange(temperature) {
+    this.setState({scale: 'f', temperature});
+  }
+
+  render() {
+    const scale = this.state.scale;
+    const temperature = this.state.temperature;
+    const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
+    const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+
+    return (
+      <div>
+        {/*사용자가 온도를 입력하면 scale에 따라 이벤트 동작! */}
+        <TemperatureInput
+          scale="c"
+          temperature={celsius}
+          onTemperatureChange={this.handleCelsiusChange} />
+        <TemperatureInput
+          scale="f"
+          temperature={fahrenheit}
+          onTemperatureChange={this.handleFahrenheitChange} />
+        {/*온도 체크*/}
+        <BoilingVerdict
+          celsius={parseFloat(celsius)} />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Calculator />,
+  document.getElementById('root')
+);
+```
 
 
 
@@ -774,4 +826,139 @@ class Calculator extends React.Component {
 ReactDOM.render(<Calculator/>, document.getElementById('root'));
 ```
 
+## State 끌어올리기
 
+이번 실습에서는 네 번째 단계인 State 끌어올리기를 진행합니다. 
+
+이전 실습에서 진행한 실습에서는 두 MoneyInput 컴포넌트가 독립적으로 money state를 저장합니다. State 끌어올리기를 적용해 이를 해결할 수 있습니다.
+
+컴포넌트들이 동일한 state를 공유하고 싶은 경우에 사용합니다.
+
+컴포넌트 간의 가장 가까운 공통 조상으로 state를 끌어올린 후, 각 컴포넌트에서 조상 컴포넌트의 state를 참조합니다. 
+
+이러한 방식을 통해 컴포넌트들이 동일한 state를 사용할 수 있습니다.
+
+아래 순서를 참고하세요!
+
+1. state를 조상 컴포넌트에 저장합니다.
+2. 자식 컴포넌트 호출 시, 아래의 값을 props로 제공합니다.
+  - 컴포넌트 구분자
+  - state 데이터
+  - setState 이벤트
+```
+<MoneyInput 
+unit="D" 
+money={money} 
+onMoneyChange={this.handleMoneyChange} />
+```
+3. 자식 컴포넌트에서 필요한 props를 추출하여 사용합니다.
+```
+const money = this.props.money;
+```
+
+직접 MoneyInput 컴포넌트에 존재하는 state를 공통조상인 Calculator 컴포넌트로 끌어올려 봅시다. 이를 통해 원화와 달러가 같은 state를 공유할 수 있습니다.
+
+1. MoneyInput 컴포넌트의 handleChange에서 데이터의 참조 방식을 아래처럼 props를 참조하는 방식으로 변경하세요.
+```
+this.props.onMoneyChange(e.target.value);
+```
+2. handleKRWChange 함수와 handleDollarChange 함수에서 money의 state를 매개변수 money로 설정하세요.
+3. render() 함수 내 onMoneyChange이벤트와 handleKRWChange 함수를 연결하는 코드, handleDollarChange 함수를 연결하는 코드를 작성하세요.
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+
+const unitNames = {
+  K: '원화',
+  D: '달러'
+};
+
+function toDollar(krw) {
+  return krw*0.00091;
+}
+
+function toKRW(dollar) {
+  return dollar*1098.23;
+}
+
+function tryConvert(temperature, convert) {
+  const input = parseFloat(temperature);
+  if (Number.isNaN(input)) {
+    return '';
+  }
+  const output = convert(input);
+  return output.toString();
+}
+
+class MoneyInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  
+  // 참조 방식을 props를 참조하는 방식으로 변경하세요.
+  handleChange(e) {
+    // this.setState({money: e.target.value});
+    this.props.onMoneyChange(e.target.value);
+  }
+
+  render() {
+    const unit = this.props.unit;
+    const money = this.props.money;
+    const calcKRW = unit === 'D' ? tryConvert(money, toKRW) : money;
+    const calcDollar = unit === 'K' ? tryConvert(money, toDollar) : money;
+
+    return (
+      <div>
+      <fieldset>
+        <legend>환율 계산기</legend>
+        {unitNames[unit]}: <input
+          value={money}
+          onChange={this.handleChange} />
+          
+      </fieldset>
+      원화: {calcKRW}
+      <br/>
+      달러: {calcDollar}
+      </div>
+    );
+  }
+}
+
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleKRWChange = this.handleKRWChange.bind(this);
+    this.handleDollarChange = this.handleDollarChange.bind(this);
+    this.state = {money: ''};
+  }
+
+  // money의 state를 매개변수 money로 설정하세요.
+  handleKRWChange(money) {
+    this.setState({money: money});
+  }
+  handleDollarChange(money) {
+    this.setState({money: money});
+  }
+
+  render() {
+    const money = this.state.money;
+    return (
+      <div>
+        {/* 함수와 이벤트를 연결하는 코드를 작성하세요. */}
+        <MoneyInput unit="K" money={money} onMoneyChange={this.handleKRWChange} />
+        <MoneyInput unit="D" money={money} onMoneyChange={this.handleDollarChange} />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Calculator/>, document.getElementById('root'));
+
+serviceWorker.unregister();
+```

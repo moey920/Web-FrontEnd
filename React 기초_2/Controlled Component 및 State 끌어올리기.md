@@ -962,3 +962,23 @@ ReactDOM.render(<Calculator/>, document.getElementById('root'));
 
 serviceWorker.unregister();
 ```
+
+## 두 필드 동기화
+
+이번 실습에서는 다섯 번째 단계인 두 필드 동기화를 진행해보겠습니다.
+
+이전 실습을 통해 컴포넌트들이 동일한 state를 사용하도록 수정했습니다. 이번 실습에서는 환율을 계산하는 기능을 동기화해봅시다.
+
+1. 삼항 연산자를 사용하여 정의된 calcKRW를 참고하여 calcDollar를 정의하세요. 입력된 컴포넌트가 원화일 경우 환율 변환 함수를 호출하고 달러일 경우 그대로 money 값을 받도록 하세요.
+
+2. render() 내 HTML 반환 시 MoneyInput 컴포넌트 호출 시 props로 onMoneyChange로 정의된 이벤트인 handleKRWChange와 handleDollarChange을 각각 알맞게 넘겨주세요.
+
+> Tips
+
+- ender() 내에서 컴포넌트 호출 시, 아래의 값들을 props로 제공합니다.
+  - 컴포넌트 구분자
+  - state 데이터
+  - setState 이벤트
+- 삼항 연산자는 변수 = 조건식? 참일 때 대입할 값 : 거짓일 때 대입할 값; 과 같은 형태로 사용되는 연산자입니다.
+
+------

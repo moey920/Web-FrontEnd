@@ -51,3 +51,103 @@ React Hooks의 장점과 사용해야 하는 이유를 요약해보자면 이렇
 Hook의 종류로는 **State Hook**과 **Effect Hook** 두 가지가 있습니다. 다음 이론 설명부터 이 둘에 대해 간단한 소개를 드릴 예정입니다. 
 
 다만 자세한 사용 방법은 Hook 개요에 대한 설명을 마친 후 알아볼 예정이니 이번 장에서는 Hook의 종류가 두 가지가 있고 그 두 가지가 무엇인지만 이해하시면 됩니다!
+
+## State Hook이란?
+
+Hook이 나오기 전에는 컴포넌트의 상태 관리를 하려면 클래스 기반 React 컴포넌트를 작성해야 했습니다. 대표적으로 상태 관리가 필요한 경우인 사용자 입력을 위한 컴포넌트를 작성한다고 생각해보겠습니다.
+
+아래 예제 코드는 사용자의 ID와 이메일을 입력받기 위한 전형적인 React 컴포넌트입니다. 클래스 컴포넌트의 this.state 필드에 userID와 email 값을 저장해두고 사용자가 이 값을 변경할 때마다 값이 갱신되고 다시 화면에 반영이 됩니다.
+```
+import React, { Component } from 'react';
+
+class UserFormClass extends Component {
+    state =  { userID: "", email: "" }
+    handleClick = ({ target: { name, value }  }) => {
+        this.setState({ [name]: value })
+        }
+        render() {
+            const { userID, email } = this.state
+            return (
+                    <>
+                      <label>
+                      userID:
+                        <input
+                           type="text"
+                           name="userID"
+                           value={userID}
+                           onChange={this.handleClick}
+                         />
+                      </label>
+                      <label>
+                      userID:
+                        <input
+                          type="email"
+                          name="email"
+                          value={email}
+                          onChange={this.handleClick}
+                         />
+                      </label>
+                    </>
+            )
+        }
+}
+```
+
+이렇게 **간단한 상태 관리조차도 클래스 기반 컴포넌트로 작성해야 한다는 점에 대해서 불편**했었습니다. 클래스 기반 컴포넌트는 함수 기반 컴포넌트보다 복잡하고 따라서 오류가 발생하기 쉽고 유지 보수가 힘들기 때문입니다.
+
+하지만 State Hook의 ```useState()```를 사용하면 함수형 컴포넌트에서 이를 간단히 사용할 수 있습니다. 아래와 같은 문법을 이용하면 위의 예시에 등장한 userID나 email 같은 state를 함수형 컴포넌트가 사용 가능합니다.
+```
+const [<상태 값 저장 변수>, <상태 값 갱신 함수>] = userState(<상태 초깃값>);
+```
+
+이렇게 useState() 함수를 사용하여 클래스 기반 컴포넌트를 함수 기반으로 작성하면 컴포넌트 상태를 관리하기 위한 코드 역시 매우 간단해집니다. 
+
+useState() 함수는 **배열을 리턴**하는데 **첫 번째 원소는 상태 값을 저장할 변수**이고 두 번째 원소는 해당 **상태 값을 갱신할 때 사용할 수 있는 함수**입니다. 
+
+useState() 함수에 인자로 해당 상태의 초깃값을 넘길 수 있습니다.
+
+> State Hook이 등장한 이후 이미 짜놓은 컴포넌트를 모조리 재작성하는 것은 권장하지 않지만 새로 작성하는 컴포넌트부터는 Hook을 이용하는 것이 권장되고 있습니다!
+
+
+## Effect Hook이란?
+
+State Hook에서 useState()로 함수형 컴포넌트에서 상태 값을 알 수 있었습니다. 
+
+이번에는 Hook의 또 다른 종류인 Effect Hook과 ```useEffect()```에 대해 알아봅시다. useEffect()는 단어에서 알 수 있듯이 함수형 컴포넌트에서 ```side effects```들을 실행하는 것입니다.
+
+React 컴포넌트 안에서 데이터를 가져오거나 구독하고, DOM을 직접 조작하는 작업을 이전에도 종종 해보셨을 것입니다. 우리는 이런 모든 동작을 “side effects”(또는 짧게 “effects”)라고 합니다. 
+
+쉽게 말해 **함수(React의 함수형 컴포넌트) 외부에서 로컬의 상태 값을 변경하는 것**을 말합니다. 이러한 과정은 다른 컴포넌트에 영향을 줄 수도 있어 렌더링 과정에서는 구현할 수 없는 작업입니다.
+
+Effect Hook의 useEffect()는 함수형 컴포넌트 내에서 이런 side effects를 수행할 수 있게 해줍니다. 간단한 카운터 예제와 함께 살펴보겠습니다.
+
+React 클래스의 **생명주기 메소드**인 ```componentDidMount()``` 나 ```componentDidUpdate()```는 로직이 분리되어 있습니다. 
+
+따라서 버튼 클릭 때마다 1씩 count를 하는 카운터 컴포넌트에서 매 렌더링 시에도 count를 갱신하고 State가 업데이트될 때에도 count를 갱신하고 싶다면 두 메소드를 동시에 사용해야 합니다.
+
+생명주기 메소드를 사용하는 대신 useEffect()를 이용한다면 쉽게 구현할 수 있습니다.
+```
+import React, { useState, useEffect }  from 'react';
+
+const Example = () = > {
+    const [count, setCount] = useState(0);
+
+    useEffect() => {
+     documen.title = 'You checked ${count} times';
+     });
+
+ return (
+     <div> 
+        <p> You clicked {count} times </p>
+        <button onClick={() => setCount(count + 1)}> Click Me</button>
+    </div>
+ );
+};
+export default Example;
+```
+
+useEffect()를 사용하는 방법은 위 코드처럼 내가 원하는 effects(여기서는 document.title을 바꾸는 것)를 동작해줄 함수 useEffect()를 작성해주면 되는 것입니다. 
+
+타이틀 바꾸는 것 외에도 필수적인 API를 불러오거나 데이터를 가져올 때도 사용 할 수 있습니다. useEffect()를 사용하면 모든 렌더링하는 요소마다 원하는 작업을 수행할 수 있어 코드를 중복할 필요가 없습니다.
+
+> 위에서 언급한 "필수적인 API를 불러오거나 데이터를 가져올 때" 는 쉽게 말해 **프론트엔드에서 백엔드의 데이터를 사용하는 데 필요한 과정**을 말합니다. 이러한 과정을 원래는 컴포넌트의 생명주기마다 구현해주어야 했는데, Effect Hook이 이를 간단하게 해준 것입니다!

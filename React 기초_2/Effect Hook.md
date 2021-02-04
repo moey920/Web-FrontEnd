@@ -278,3 +278,67 @@ ReactDOM.render(<Container />,document.getElementById('root'));
 
 serviceWorker.unregister();
 ```
+
+## 정리가 필요한 **함수형** 컴포넌트 실습
+
+마지막으로 정리가 필요한 함수형 컴포넌트에 대해 알아봅시다. 클래스형 컴포넌트에서 componentWillUnmount() 메소드를 통해 실행하던 코드를 useEffect를 이용해 실행해야 합니다.
+
+이때 정리가 필요한 컴포넌트는 아래처럼 useEffect 내 함수의 반환을 통해 구현합니다. Mounting과 Updating 시 실행할 코드는 구현한 함수 위에 작성해주면 됩니다.
+```
+useEffect(() => {
+    // Mounting 및 Updating 시 실행할 코드
+    return function 함수명() {
+      // Unmounting 시 실행할 코드
+    }
+});
+```
+이렇게 함으로써 생명주기 메소드를 함수형 컴포넌트 한 곳에서 관리할 수 있습니다.
+
+컴포넌트가 정리될 때, 즉 Unmounting 되는 시점에 useEffect에서 메소드가 반환되는 것을 실습을 통해 알아봅시다.
+
+- Child 컴포넌트에서 useEffect()를 화살표 함수로 생성하고 텍스트가 제거 되었습니다! 경고창을 띄우도록 함수를 만들어 반환하세요.
+
+```
+import ReactDOM from 'react-dom';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+import React, { useState, useEffect } from 'react';
+
+function Container() {
+  const [show, setShow] = useState(true);
+  
+  let myheader;
+  if (show) {
+    myheader = <Child />;
+  }
+  
+  return (
+    <div>
+    {myheader}
+    <button onClick={() => setShow(false)}>버튼</button>
+    </div>
+  );
+}
+
+function Child() {
+  // useEffect() 내 경고 문구를 출력하는 cleanup() 메소드를 반환하세요.
+  useEffect(() => {
+  // Mounting 및 Updating 시 실행할 코드
+  // alert("Mountiong or Updating 되었습니다.")
+    // Unmounting 시 실행할 코드
+    return function cleanup() {
+        alert("텍스트가 제거 되었습니다!")
+    }
+  });
+  
+  return (
+    <p>버튼을 클릭해 해당 텍스트를 제거하세요.</p>
+  );
+  
+}
+
+ReactDOM.render(<Container />,document.getElementById('root'));
+
+serviceWorker.unregister();
+```
+

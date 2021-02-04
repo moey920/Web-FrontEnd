@@ -342,3 +342,78 @@ ReactDOM.render(<Container />,document.getElementById('root'));
 serviceWorker.unregister();
 ```
 
+## Effect Hook 요약
+
+지금까지 배운 내용을 바탕으로 Effect Hook을 이용한 프로그램을 통해 useEffect()를 이용은 또 다른 방법을 알아보겠습니다.
+
+앞의 실습들과 달리 대괄호를 이용해 특정 State의 변화를 확인할 수 있습니다. 아래 코드를 참고해주세요.
+```
+useEffect(()=>{},[특정변수 혹은 오브젝트]);
+```
+
+이렇게 useEffect()에서 대괄호 안에 변수 혹은 오브젝트를 입력하면 입력한 것이 변화할 때 useEffect()가 호출이 됩니다. 하지만 대괄호가 비어있으면 변화에 대해 반응하지 않으며 최초 렌더링 혹은 컴포넌트 해제 시 호출이 됩니다. 다만 실습처럼 대괄호를 지정하지 않고, 같이 사용할 수도 있습니다.
+
+또한 useEffect()가 여러 개 존재할 수도 있습니다. 오른쪽 코드는 텍스트를 입력받고 그대로 화면에 띄우는 간단한 코드입니다. 단, 10초가 지나면 텍스트를 입력받고 띄우는 컴포넌트가 종료되도록 설정되어 있습니다.
+
+코드 아래에 있는 App 컴포넌트에서 Example 컴포넌트를 10초 동안만 불러옵니다. 프로그램 최초 실행 시 두 번째 useEffect()가 한 번 호출되고 10초간 입력되는 테스트 변화에 따라 첫 번째 useEffect()가 호출됩니다. 그리고 10초가 지난 뒤 두 번째 useEffect()가 다시 호출됩니다.
+
+- 코드 내 존재하는 두 개의 useEffect()가 언제 호출되는지 콘솔 출력으로 확인하세요.
+```
+import ReactDOM from 'react-dom';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+
+
+import React, { useState, useEffect } from 'react';
+
+const Example = () => {
+  const [username, setUsername] = useState("");
+
+  // 언제 호출되는지 확인하기 위해 useEffect에서 콘솔 출력을 해보세요.
+  useEffect(() => {
+    console.log("useEffect 호출")
+  
+    },
+    [username]
+  );
+
+  useEffect(() => {
+    return () => {
+        console.log("useEffect2 호출")
+    
+    };
+  }, []);
+
+  const handleUsername = e => {
+    const { value } = e.target;
+
+    setUsername(value);
+  };
+
+  return (
+    <div>
+      <div>
+        <input value={username} onChange={handleUsername} />
+      </div>
+      <div>
+        <span>{username}</span>
+      </div>
+    </div>
+  );
+};
+
+function App() {
+  const [shouldRender, setShouldRender] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShouldRender(false);
+    }, 10000);
+  }, []);
+
+  return shouldRender ? <Example /> : null;
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+serviceWorker.unregister();
+```

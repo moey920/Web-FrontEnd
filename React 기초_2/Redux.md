@@ -71,44 +71,58 @@ Redux를 직접 설치하고 적용해봅시다.
 ```
 npm install --save redux react-redux
 ```
-
+또는
+```
 yarn add redux react-redux
-redux를 프로젝트에 추가한다면
+```
 
+#### redux를 프로젝트에 추가한다면
+```
 $ npm i redux
-리액트 프로젝트에 Redux를 추가한다면
+```
 
+#### 리액트 프로젝트에 Redux를 추가한다면
+```
 $ npm i redux
 $ npm i react-redux
+```
+
 기본적으로 자바스크립트로 작성된 라이브러리에서 모두 사용 가능한 redux와
 리액트와 Redux의 공식 바인딩 패키지인 react-redux를 함께 설치해줍니다.
 
 그 다음은 store를 생성하기전에 프로젝트를 진행하는 도움이 되는 몇가지 library을 설치해주세요.
-
+```
 - yarn add redux-thunk
 - yarn add redux-logger --dev
 - yarn add react-router-dom react-router-redux history
 - yarn add redux-devtools-extension --dev
-Redux 확장프로그램 설치하기
+```
+
+### Redux 확장프로그램 설치하기
 Redux의 개발자 도구(redux-devtools 확장 프로그램)를 사용하면 현재 스토어의 상태를 개발자 도구에서 조회 할 수 있고 지금까지 어떤 액션들이 디스패치 되었는지, 그리고 액션에 따라 상태가 어떻게 변화했는지 확인할 수 있습니다. 추가적으로 액션을 직접 디스패치 할 수도 있습니다.
 
-1) 먼저 크롬 웹스토어로 가면 Redux DevTools 이란 크롬 확장 프로그램을 받을 수 있습니다. 여기서 확장 프로그램을 설치해줍니다.
+<https://chrome.google.com/webstore/category/extensions?hl=ko>
+1. 먼저 크롬 웹스토어로 가면 Redux DevTools 이란 크롬 확장 프로그램을 받을 수 있습니다. 여기서 확장 프로그램을 설치해줍니다.
 설치 후 아래와 같이 스토어(Store) 생성 시 + window.REDUX_DEVTOOLS_EXTENSION && window.REDUX_DEVTOOLS_EXTENSION() 를 추가해주면 크롬 개발자 모드에서 Redux의 상태 변화를 볼 수 있습니다.
-
+```
 const store = createStore(
    reducer, /* preloadedState, */
 +  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
  );
-2) 다음은 프로젝트에 redux-devtools-extension라이브러리를 설치해줍니다.
+```
 
+2. 다음은 프로젝트에 redux-devtools-extension라이브러리를 설치해줍니다.
+```
 //yarn으로 설치하는 경우
 yarn add redux-devtools-extension
-또는
+//또는
 
 //npm으로 설치하는 경우
 npm add redux-devtools-extension
-3) 다음에는 index.js를 수정해주면 됩니다.
+```
 
+3. 다음에는 index.js를 수정해주면 됩니다.
+```
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -130,4 +144,90 @@ ReactDOM.render(
 );
 
 serviceWorker.unregister();
+```
 이렇게 하시면 크롬의 개발자도구에서 redux를 확인하실 수 있습니다.
+
+## Action, Reducer, Store 개념 정리
+
+앞으로 접하게 될 키워드들에 대해서 미리 알아보는 시간을 가져보겠습니다. 대략적인 개념만 간략히 알아보는 것 이므로, 도중에 잘 이해가 안가는게 있더라도, 나중에 직접 사용해본 다음에 이 섹션으로 다시 돌아와서 다시 읽으시면 이해가 더욱 잘 될 것입니다.
+
+아주 간단하게 이야기하자면, Action에서 나는 ‘공의 색을 바꿀꺼야.’ ‘빨간색’으로 라고 **지시**하고 Reducer는 ‘공의 색을 바꿀꺼야.’ 라고 요청을 받았을때 **직접 공의 색을 ‘빨간색’으로 바꾸는** 일을합니다. 그리고 그런 **Reducer들은 Store에 모여있고 Store는 Action의 요청을 받고 Reducer로 수정된 것을 dispatch()를 통해 반영**해 준답니다.
+
+### 액션 (Action)
+
+애플리케이션의 상태를 변경 불가능한 한 객체 안에 저장해야 한다는 중요한 Redux 규칙을 소개했습니다.
+변경 불가능이란 말은 상태 객체 내부가 바뀌지 않는다는 뜻입니다. 상태에 어떠한 변화가 필요하게 될 때는 객체 전체를 바꿔치기하는 방식을 사용하고, Action(액션)이 그렇게 바꿀 대상을 지정합니다. 액션은 애플리케이션 상태 중에서 어떤 부분을 바꿀지 지정하고 그런 변경에 필요한 데이터를 제공합니다.
+상태를 액션으로 어떻게 갱신하고 변경하는지 constant.js 파일에 나열된 액션들을살펴봅시다.
+
+const constants = {
+SORT_COLORS: "SORT_COLORS" ,
+ADD_COLOR: "ADD_COLOR" ,
+RATE_COLOR: "RATE_COLOR",
+REMOVE_COLOR: "REMOVE_COLOR"
+}
+export default constants
+액션에는 type 필드 (: {type: “ADD_COLOR” } 가 꼭 존재해야 합니다
+색 관리 앱의 경우 사용자는 색을 추가하거나(add), 색을 제거하거나(remove), 색에 평점을 매기거나(rate), 색 목록을 정렬(sort)할 수 있습니다. 여기서 각각의 액션 유형에 해당하는 문자열 값을 정의합니다.
+리듀서 (reducer)
+Redux에서는 함수를 사용해 상태 트리 일부를 갱신하는데 이런 함수를 reducer라고 부릅니다. 스토어를 생성할때 반드시 제공해야하는 인자(함수)가 바로 reducer입니다.
+Redux를 사용하는 것이 reducer를 작성하는일이라고 말해도 과언이 아닐 만큼 reducer는 Redux의 아주 핵심적인 부분입니다.
+
+reducer는 현재 상태와 액션을 인자로 받아 새로운 상태를 만들어 상태 트리 중 특정 부분을 갱신할 때, 그 부분은 트리의 가지 (중간 노드) 일 수도 있고 잎(말단 노든)일 수도 있습니다. 이런 reducer를 합성하면 어떤 액션에 대해 앱 전체 상태 갱신을 담당하는 reducer를 만들 수 있습니다.
+
+다음 색 관리 앱 상태 트리의 각 부분을 위한 reducer를 작성하는 방법을 알아보겠습니다.
+
+색 관리 앱의 reducer 틀
+
+import C from '../constants'
+export const color = (state={}, action) => {
+return {}
+}
+export const colors = (state=[], action) => {
+return []
+}
+export const sort = (state=""SORTED_BY_DATE" , action) => {
+return ""
+}
+reducer 작성 방법
+
+export const color = (state = {}, action) => {
+    switch (action.type) {
+        case C.ADD_COLOR:
+            return {
+                    id: action.id,
+                    title: action.title,
+                    color:action.color,
+                    timestamp: action.timestamp,
+                    rating: 0
+        }
+        case. C.RATE_COLOR:
+        return (state.id !++ action.id) ?
+         state : {
+         ...state,
+         rating: action.rating
+         }
+         default:
+         return state
+         }
+}
+color 리듀서는 객체인 state를 받아서 객체를 반환합니다.
+colors 리듀서는 배열인 state를 받아 배열을 반환합니다.
+sort 리듀서는 문자열인 state를 받아서 문자열을 반환합니다.
+각 리듀서는 자신이 상태 트리에서 맡은 부분을 갱신할 때 필요한 액션만 처리하도록 설계되었습니다.
+color 리듀서는 새로운 색이나 변경된 색 객체가 필요한 액션인 ADD_COLOR와 RATE_COLOR만 처리하고
+colors 리듀서는 colors배열을 다루어야 하는 액션인 ADD_COLOR, REMOVE_COLOR, RATE_COLOR만 처리합니다.
+마지막으로 sort 리듀서는 SORT_COLORS 액션만 처리합니다.
+
+color리듀서와 colors리듀서는 같은 액션 ADD_COLOR와 RATE_COLOR을 가지고 있지만 트리에서 서로 다른 부분을 변경합니다. ADD_COLOR를 처리할 때 color 리듀서는 입력받은 값을 프로퍼티로하는 새 색 객체를 반환하지만 colors리듀서는 배열에 새로운 색 객체를 추가합니다.
+
+액션 데이터의 객체 ADD_COLOR: “ADD_COLOR” , 만약에 액션의 타입이 ADD_COLOR 라면 리듀서에서 (case C.ADD_COLOR:) 액션의 아이디,타이틀, 색등을 리턴해주는데 이 리턴해주는 값들은 state(상태)의 새로운 값이 됩니다. 즉 리듀서는 state를 입력값으로 받고 액션에 참조해서 새로운 state값을 만들어내는 state 가공자 입니다.
+
+스토어 (Store)
+리덕스에서는 한 애플리케이션 당 하나의 Store를 만들게 됩니다. 스토어는 state(상태) 데이터를 보관하고 있는 은행이라고 보시면 됩니다. 스토어는 애플리케이션의 상태 데이터를 저장하고 모든 상태 갱신을 처리합니다. 스토어 안에는, 현재의 앱 상태와, 리듀서가 들어가있고, 추가적으로 몇가지 내장 함수들이 있습니다.
+
+스토어에 존재하는 State는 아주 신성한 것이라고 할 수 있습니다. React 컴포넌트같은 하등한 것이 직접 접근하려고 하면 안 되는 것이죠. 직접 접근하기 위해 Action이라는 의식을 거쳐야 합니다.
+
+디스패치 (dispatch)
+디스패치는 스토어의 내장함수 중 하나입니다. 디스패치는, 액션을 발생 시키는 것 이라고 이해하시면 됩니다. dispatch 라는 함수에는 액션을 파라미터로 전달합니다. dispatch(action) 이런식으로 말이죠.
+
+그렇게 호출을 하면, 스토어는 리듀서 함수를 실행시켜서 해당 액션을 처리하는 로직이 있다면 액션을 참고하여 새로운 상태를 만들어줍니다.

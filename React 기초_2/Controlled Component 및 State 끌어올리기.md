@@ -105,7 +105,7 @@ handleChange(event) {
 
 HTML과 React의 폼 사용에 대해 비교해보고 controlled component(제어 컴포넌트)가 언제 쓰이는지 알아봅시다.
 
-**HTML vs React**
+** HTML vs React **
 
 HTML은 다양한 입력 폼 엘리먼트를 통해 자신의 state를 관리&업데이트합니다.
 

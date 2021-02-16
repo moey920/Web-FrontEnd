@@ -112,3 +112,89 @@ finish
 ```
 
 이렇게 비동기 처리를 했더니 finish 가 먼저 출력됐습니다. setTimeout 함수 내부의 처리는 비동기적으로 실행되므로 처리가 완료되기를 기다리지 않고 finish를 출력하는 줄이 먼저 실행되는 것입니다. 이 처럼 처리가 완료되기를 기다리지 않고 실행되는 방식을 비동기 처리라고 합니다. setTimeout 외의 비동기 처리의 예로는 API요청, 데이터베이스 접속 등이 있습니다.
+
+# redux-thunk
+
+비동기 작업에 관련된 미들웨어 라이브러리는 redux-thunk, redux-saga, redux-observable, redux-promise-middleware 등이 있습니다. 리덕스를 사용하는 애플리케이션에서 비동기 작업을 처리할 때 가장 기본적인 방법은 redux-thunk라는 미들웨어를 사용하는 것입니다. 
+
+redux-thunk는 리덕스를 개발한 Dan Abramov 가 만든 것이며, redux 공식 매뉴얼에서도 이 미들웨어를 사용하여 비동기 작업을 다룹니다. redux-thunk를 사용하면 액션 객체가 아닌 함수를 디스패치 할 수 있습니다.
+
+## thunk란?
+
+thunk라는 단어가 굉장히 낯선 분들도 있을 것입니다.
+thunk는 “생각한다”라는 의미를 가진 “think”의 비표준 과거형 단어입니다. 프로그래밍 세계에서는 “필요할 때 처리한다”라는 의미로 많이 사용됩니다. thunk 미들웨어는 redux-thunk라는 이름으로 npm에 올라가 있습니다.
+
+간단히 말해 thunk란 특정 작업을 나중에 하도록 미루기 위해서 함수 형태로 감싼 것을 칭합니다.
+
+예를 들어서 여러분들이 1 + 1을 지금 당장 하고 싶다면 이렇게 하겠죠?
+```
+const x = 1+1;
+```
+하지만 다음과 같이 할 수도 있습니다.
+```
+const foo = () => 1+1;
+```
+이렇게 하면, 1 + 1의 연산이 코드가 실행될 때 바로 이뤄지지 않고 나중에 foo()가 호출되어야만 이뤄집니다.
+
+redux-thunk는 뭘 하는 미들웨어(액션과 리듀서 사이의 중간자) 일까요?
+
+## redux-thunk가 하는일
+
+- pure javascript object 형태로 action을 반환하던 actionCreator에서 함수로 래핑한 형태로 반환 가능하게 함
+- actionCreator가 함수를 반환하는데, 이 함수는 dispatch와 getState를 파라미터로 갖고 내부에서 비동기적으로 action을 dispatch 가능
+```
+const INCREMENT_COUNTER = 'INCREMENT_COUNTER'
+
+function increment() {
+    return {
+        type: INCREMENT_COUNTER,
+    }
+}
+
+function incrementAsync() {
+    return dispatch => {
+        setTimeout(() => {
+            // Yay! Can invoke sync or async actions with `dispatch`
+            dispatch(increment())
+        }, 1000)
+    }
+}
+```
+
+가장 간단히 설명하자면, 이 redux-thunk는 객체 대신 함수를 생성하는 액션 생성 함수를 작성할 수 있게 해 줍니다.
+
+일반적인 dispatch 예시
+```
+store dispatch({type: 'DO_SOMETHING' });
+```
+
+Redux-Thunk dispatch 예시
+```
+store.dispatch((dispatch,getState) => {
+   dispatch ({type: DO_SOMETHING });
+     });
+```
+store.dispatch에 함수가 전달되면 next 함수를 실행하지 않고, 매개변수로 전달된 함수를 실행합니다. 이때 매개변수에 store.dispatch와 store.getState를 전달합니다. 액션으로 전달된 함수 내부에서 dispatch를 사용하면 원하는 시점에 디스패치할 수 있습니다. 비동기적으로 실행되는 API 요청의 콜백 또는 setTimeout 내부에서도 디스패치할 수 있게 되는 것입니다.
+
+## redux-thunk 설치
+```
+npm install redux-thunk
+```
+또는
+```
+$ yarn add redux-thunk
+```
+
+redux-thunk은 미들웨어이기 때문에 storeFactory와 함께 사용해야 합니다. 먼저 index.js 파일의 앞부분에 redux-thunk를 임포트 하세요.
+```
+import thunk from 'redux-thunk' 
+
+Redux Thunk, use applyMiddleware():
+
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers/index';
+
+// Note: this API requires redux@>=3.1.0
+const store = createStore(rootReducer, applyMiddleware(thunk));
+```

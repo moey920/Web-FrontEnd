@@ -198,3 +198,115 @@ import rootReducer from './reducers/index';
 // Note: this API requires redux@>=3.1.0
 const store = createStore(rootReducer, applyMiddleware(thunk));
 ```
+
+# redux-thunk를 이용한 비동기 처리
+
+## redux-thunk 적용(1) - 콜백으로 비동기처리하기
+
+thunk 미들웨어 적용 (store.js)
+```
+import { createStore, applyMiddleware } from 'redux';
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
+import reducers from './reducers';
+
+
+const middlewares = { logger, thunk];
+
+const store = createStore (
+reducers,
+applyMiddleware(...middlewares)
+);
+
+export default store;
+```
+
+이렇게 thunk 미들웨어를 적용해서 비동기적으로 실행되는 액션을 작성해봤습니다. 그럼 실제로 코드를 실행해보고 비동기 액션클리에이터와 동기 액션크레이터가 어떻게 작동하는지 살펴보겠습니다. 동기적인 엑션크레이터는 매개변수로 Todo의 타이틀을 받고 자동으로 유니크ID를 생성하고 액션 객체를 리턴합니다.
+비동기 액션크레이터를 사용하면 함수를 리턴합니다. 이때 리턴하는 함수는 dispatch 함수와 getState함수를 매개변수로 갖습니다.
+```
+import * as types from '../types/todo';
+//동기 액션크리에이터
+export function addTodo(title) {
+return { 
+type: types.ADD_TODO,
+
+payload: {
+id: shortid.generate(),
+title,
+},
+};
+}
+
+//비동기 액션크리에이터
+export function asyncAddTodo(title) {
+return (dispatch, getState) => {
+setTimeout(() => {
+ setTimeout(() => {
+ dispatch(addTodo(title));
+ }, 1000);
+ };
+ }
+ ```
+
+## redux-thunk 적용(2) - 카운터 딜레이하기
+
+thunk 함수를 만들고, setTimeout를 사용하여 액션이 디스패치되는 것을 1초씩 딜레이 시켜봅시다.
+
+increaseAsync와 decreaseAsync라는 thunk 함수를 만들겠습니다.
+```
+// 액션 타입
+const INCREASE = 'INCREASE';
+const DECREASE = 'DECREASE';
+
+// 액션 생성 함수
+export const increase = () => ({ type: INCREASE });
+export const decrease = () => ({ type: DECREASE });
+
+// getState를 쓰지 않는다면 굳이 파라미터로 받아올 필요 없습니다.
+export const increaseAsync = () => dispatch => {
+  setTimeout(() => dispatch(increase()), 1000);
+};
+export const decreaseAsync = () => dispatch => {
+  setTimeout(() => dispatch(decrease()), 1000);
+};
+
+// 초깃값 (상태가 객체가 아니라 그냥 숫자여도 상관 없습니다.)
+const initialState = 0;
+
+export default function counter(state = initialState, action) {
+  switch (action.type) {
+    case INCREASE:
+      return state + 1;
+    case DECREASE:
+      return state - 1;
+    default:
+      return state;
+  }
+}
+```
+이제 컨테이너 컴포넌트를 다음과 같이 수정해보세요.
+```
+import React from 'react';
+import Counter from '../components/Counter';
+import { useSelector, useDispatch } from 'react-redux';
+import { increaseAsync, decreaseAsync } from '../modules/counter';
+
+function CounterContainer() {
+  const number = useSelector(state => state.counter);
+  const dispatch = useDispatch();
+
+  const onIncrease = () => {
+    dispatch(increaseAsync());
+  };
+  const onDecrease = () => {
+    dispatch(decreaseAsync());
+  };
+
+  return (
+    <Counter number={number} onIncrease={onIncrease} onDecrease={onDecrease} />
+  );
+}
+
+export default CounterContainer;
+```
+카운터의 버튼들을 클릭할 때 액션 디스플레이가 디스패치된 걸 (버튼을 클릭한 다음 1초 후에 결과가 나오는 것)을 확인할 수 있습니다.

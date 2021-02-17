@@ -40,10 +40,12 @@ CRUD는 Create, Read, Update, Delete의 제일 앞 문자를 하나씩 따와 �
 1. 각각의 기능에 대해 모듈화
 
 순수 html의 컴포넌트들을 부품화 시켜서 자바스크립트로 구현하기 쉽게 설정합니다.
+
 2. store 생성, reducer생성과 state 사용하기
 
-스토어를 생성한 뒤 리듀서를 작성하세요.
-스토어를 처음 생성하게 되면 바로 초기 액션과는 상관없이 호출되는데 그때 state(상태) 값은 undefined입니다.
+- 스토어를 생성한 뒤 리듀서를 작성하세요.
+- 스토어를 처음 생성하게 되면 바로 초기 액션과는 상관없이 호출되는데 그때 state(상태) 값은 undefined입니다.
+```
 function reducer(state, action){
     if(state === undefined){
         return {
@@ -56,10 +58,13 @@ function reducer(state, action){
 }
 var store = Redux.createStore(reducer);
 subject();
+```
+
 3. action을 dispatch를 통해서 전달해서 UI 업데이트
 
-State값이 바뀔 때 subscribe를 하고 있는 함수들을 호출하는 것을 통해서 UI가 업데이트됩니다.
-글 목록을 클릭했을 때 액션을 만들고 액션 타입이 ‘SELECT’ 일 때, state.contents[i].id 라는 state값과 액션을 리턴해야 합니다.
+- State값이 바뀔 때 subscribe를 하고 있는 함수들을 호출하는 것을 통해서 UI가 업데이트됩니다.
+- 글 목록을 클릭했을 때 액션을 만들고 액션 타입이 ‘SELECT’ 일 때, state.contents[i].id 라는 state값과 액션을 리턴해야 합니다.
+```
 while(i<state.contents.length){
 liTags = liTags + `
     <li>
@@ -73,12 +78,16 @@ liTags = liTags + `
     </li>`;
 i = i + 1;
 }
-여기서 state값을 리턴할때는 다음과 같이 반드시 복제된 state을 리턴해야 합니다.
+```
+- 여기서 state값을 리턴할때는 다음과 같이 반드시 복제된 state을 리턴해야 합니다.
+```
 newState = Object.assign({}, state, {
     mode:action.mode
 });
-4. subscribe를 통해서 자동 갱신 되도록 처리
+```
 
+4. subscribe를 통해서 자동 갱신 되도록 처리
+```
 function description(){
     var state = store.getState();
     if(state.mode === 'create'){
@@ -102,3 +111,37 @@ function reducer(state, action){
     }
 var store = Redux.createStore(reducer);
 store.subscribe(description); // 다음과 같이 subscribe를 통해서 description 함수가 자동 갱신 되도록 처리
+```
+
+### 부품화 된 리액트 컴포넌트에 스토어 생성하기 실습
+
+다음 index.js 에 작성된 코드는 아주 간단하게 redux를 사용하여 글생성과 글삭제를 구현하기 위해 html의 모든 컴포넌트들을 부품화 시킨 코드입니다.
+```
+subject();
+TOC();
+control();
+article();
+```
+
+컴포넌트 부품화를 끝낸 index.html의 function들의 이름만 봐도 어떤 컴포넌트와 관련된 것인지 한눈에 알 수가 있습니다. 이제 리덕스를 적용하여 컴포넌트에 기능을 연결해 봅시다.
+
+- 앞으로 이 실습들은 계속 inspect<console 창을 열어서 state값을 확인하시면 리덕스의 상태 관리를 이해하기 쉬워집니다.
+
+1. index.html파일 내 <script> 내 맨 아래 코드 위에 바로 리듀서를 생성한 다음 그 리듀서를 받는 스토어를 생성하세요.
+```
+subject();
+TOC(); //입력된 개체를 화면에 표시
+control();
+article();
+```
+
+- 먼저 function reducer를 작성한 다음 state가 undefined일 경우, 다음과 같은 내용을 content 내에 반환하세요.
+```
+contents:[
+{id:1,title:'Redux',desc:'Redux is ..'},
+{id:2,title:'React-Redux', desc:'React-Redux is ..'}
+]
+```
+
+2. GUI창 확장<마우스 우클릭<inspect<console 에 store.getState()에서 초기값이 무엇인지 확인하세요.
+

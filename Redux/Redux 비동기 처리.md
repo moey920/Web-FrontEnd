@@ -310,3 +310,125 @@ function CounterContainer() {
 export default CounterContainer;
 ```
 카운터의 버튼들을 클릭할 때 액션 디스플레이가 디스패치된 걸 (버튼을 클릭한 다음 1초 후에 결과가 나오는 것)을 확인할 수 있습니다.
+
+- 동기적인 액션크리에이터는 일반적인 액션을 리턴합니다.
+- thunk 미들웨어를 사용하면 일반적인 액션 객체가 아닌 함수를 리턴할 수 있습니다.
+- 비동기적인 처리를 하는 가장 기본적인 방법은 setTImeout()을 사용하는건데 setTimeout은 비동기적으로 실행되므로 처리가 완료되기를 기다리지않고 finish를 출력하는 줄이 먼저 실행됩니다.
+- 비동기적인 액션크리에이터는 함수를 리턴한다.
+
+# Promise 란?
+
+Promise는 자바스크립트 비동기 처리에 사용되는 객체입니다.
+Promise 객체는 비동기 작업이 맞이할 미래의 완료 또는 실패와 그 결과 값을 나타냅니다.
+
+Promise는 프로미스가 생성될 때 꼭 알 수 있지는 않은 값을 위한 대리자로, 비동기 연산이 종료된 이후의 결과값이나 실패 이유를 처리하기 위한 처리기를 연결할 수 있도록 합니다. 
+
+Promise를 사용하면 비동기 메서드에서 마치 동기 메서드처럼 값을 반환할 수 있습니다. 다만 최종 결과를 반환하지는 않고, 대신 Promise를 반환해서 미래의 어떤 시점에 결과를 제공합니다.
+
+프로미스는 주로 서버에서 받아온 데이터를 화면에 표시할 때 사용합니다. 일반적으로 웹 애플리케이션을 구현할 때 서버에서 데이터를 요청하고 받아오기 위해 아래와 같은 API를 사용합니다.
+```
+$.get('url 주소/products/1', function(response) {
+  // ...
+});
+```
+위 API가 실행되면 서버에다가 ‘데이터 하나 보내주세요’ 라는 요청을 보내죠. 그런데 여기서 데이터를 받아오기도 전에 마치 데이터를 다 받아온 것 마냥 화면에 데이터를 표시하려고 하면 오류가 발생하거나 빈 화면이 뜹니다. 이와 같은 문제점을 해결하기 위한 방법 중 하나가 프로미스입니다.
+
+## 프로미스의 3가지 상태(states)
+
+프로미스를 사용할 때 알아야 하는 가장 기본적인 개념이 바로 프로미스의 상태(states)입니다. 여기서 말하는 상태란 프로미스의 처리 과정을 의미합니다. new Promise()로 프로미스를 생성하고 종료될 때까지 3가지 상태를 갖습니다.
+
+- Pending(대기) : 비동기 처리 로직이 아직 완료되지 않은 상태
+- Fulfilled(이행) : 비동기 처리가 완료되어 프로미스가 결과 값을 반환해준 상태
+- Rejected(실패) : 비동기 처리가 실패하거나 오류가 발생한 상태
+
+### Pending(대기)
+
+먼저 아래와 같이 new Promise() 메서드를 호출하면 대기(Pending) 상태가 됩니다.
+```
+new Promise();
+```
+
+new Promise() 메서드를 호출할 때 콜백 함수를 선언할 수 있고, 콜백 함수의 인자는 resolve, reject입니다.
+```
+new Promise(function(resolve, reject) {
+  // ...
+});
+```
+
+### Fulfilled(이행 또는 완료)
+
+여기서 콜백 함수의 인자 resolve를 아래와 같이 실행하면 이행(Fulfilled) 상태가 됩니다.
+```
+new Promise(function(resolve, reject) {
+  resolve();
+});
+```
+그리고 이행 상태가 되면 아래와 같이 then()을 이용하여 처리 결과 값을 받을 수 있습니다.
+```
+function getData() {
+  return new Promise(function(resolve, reject) {
+    var data = 100;
+    resolve(data);
+  });
+}
+// resolve()의 결과 값 data를 resolvedData로 받음
+getData().then(function(resolvedData) {
+  console.log(resolvedData); // 100
+});
+```
+Promise의 개념과 redux-thunk 적용 방법에 대한 더 자세한 설명이 필요하시다면 다음 링크들을 참조하세요.
+
+- Promise 개념<https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Using_promises>
+- Promise 적용 방법<https://react.vlpt.us/redux-middleware/05-redux-thunk-with-promise.html>
+
+Redux-thunk를 사용할 경우의 Promise를 사용하는 예를 살펴봅시다.
+
+#### Promise의 예 (1)
+```
+const sleep1000ms = () => {
+    return new Promise(resolve => {
+            setTimeout(() => {
+                resolve();
+                } , 1000);
+            });
+};
+
+export function addTodo(title) {
+return {
+    type: types.ADD.TODO,
+        payload: {
+            id: short.id.generate(),
+            title,
+        },
+    };
+}
+
+//Promise 버전
+export function asyncAddTodo(title) {
+ return (dispatch) => {
+         sleep1000ms().then((=> {
+                 dispatch(addTodo(title));
+                 });
+            };
+}
+```
+
+#### Promise의 예 (2)
+
+다음은 promise를 카운터에 적용했을 때 해당 숫자가 number가 아니면 reject(실패), 5 이상일 경우에는 true를 반환하고 그 외의 경우에는 false를 반환합니다.
+```
+export const checkNumber = async number => { //넘버를 체크해서 Promise를 리턴
+  await sleep(500) 
+  return new Promise((resolve, reject) => { 
+    if(isNaN(number)) reject(`${number} is NaN`)
+    if(number >= 5) resolve(true)
+    else resolve(false)
+  })
+}
+```
+
+Promise를 다루는 Redux 모듈을 다룰 땐 다음과 같은 사항을 고려해야합니다.
+
+- Promise가 시작, 성공, 실패했을때 다른 액션을 디스패치해야합니다.
+- 각 Promise마다 thunk 함수를 만들어주어야 합니다.
+- 리듀서에서 액션에 따라 로딩중, 결과, 에러 상태를 변경해주어야 합니다.

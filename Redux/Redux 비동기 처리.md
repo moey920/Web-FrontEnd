@@ -432,3 +432,228 @@ Promise를 다루는 Redux 모듈을 다룰 땐 다음과 같은 사항을 고�
 - Promise가 시작, 성공, 실패했을때 다른 액션을 디스패치해야합니다.
 - 각 Promise마다 thunk 함수를 만들어주어야 합니다.
 - 리듀서에서 액션에 따라 로딩중, 결과, 에러 상태를 변경해주어야 합니다.
+
+### redux-thunk 적용하기 실습
+
+redux-thunk를 설치한다음 미들웨어를 적용해봅시다.
+
+이 실습은 리들웨어를 어떻게 스토어에 적용 하는지만 쉽게 이해하도록 하겠습니다.
+
+코드 작성하지않고 바로 실행한 뒤, gui페이지를 새로고침하면 다음과 같이 saga와 thunk 미들웨어를 apply 해야된다는 문구가 뜹니다.
+
+지시사항
+1. redux-thunk와 redux-saga 를 다음과 같이 import하세요.
+```
+import logger from "redux-logger"
+import ReduxThunk from "redux-thunk"
+import createSagaMiddleware from "redux-saga"
+```
+
+2. 그 다음은 미들웨어를 다음과 같이 설정하세요.
+```
+const sagaMiddleware = createSagaMiddleware()
+```
+실행 후 GUI 페이지를 반드시 새로고침
+
+```
+import React from "react"
+import ReactDOM from "react-dom"
+import App from "./App"
+import { applyMiddleware, createStore } from "redux"
+import rootReducer, { rootSaga } from "./modules/index"
+import { Provider } from "react-redux"
+import { composeWithDevTools } from "redux-devtools-extension" // 리덕스 개발자 도구
+import logger from "redux-logger"
+import ReduxThunk from "redux-thunk"
+import createSagaMiddleware from "redux-saga"
+
+const sagaMiddleware = createSagaMiddleware()
+
+
+/* 
+미들웨어가 여러개인경우에는 파라미터로 여러개를 전달해주면 됩니다. 
+예: applyMiddleware(a,b,c)
+미들웨어의 순서는 여기서 전달한 파라미터의 순서대로 지정됩니다.
+// 1. 스토어를 만들고 logger를 제외한 나머지 미들웨어 redux thunk 와 saga 를 적용하세요.
+*/
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(logger))
+) 
+
+
+sagaMiddleware.run(rootSaga)
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
+)
+```
+
+### Redux-thunk를 사용한 비동기처리 - 미들웨어 적용 실습
+
+[실습2]~ [실습5] 에서는 비동기처리를 다룰때 사용하는 대표적인 미들웨어인 redux-thunk와 redux-saga를 [Redux 기초 1] 에서 만들었던 카운터에 적용해봅시다.
+
+> 이 실습에서는 redux-thunk 의 개념만 짚겠습니다.
+
+redux-thunk와 redux-saga 적용해서 카운터 버튼이 +1 또는 -1 될때 비동기 처리되게 만드는것이 목표입니다.
+
+미들웨어는 store를 생성할 때 설정합니다.
+redux 모듈안에 들어있는 applyMiddleware를 사용하여 설정합니다.
+
+1. src/index.js 내에 스토어를 생성할때 미들웨어를 composeWithDevTools안에 applyMiddleware를 사용하여 스토어에 redux thunk 와 saga 미들웨어를 적용하세요.
+
+```
+import React from "react"
+import ReactDOM from "react-dom"
+import App from "./App"
+import { applyMiddleware, createStore } from "redux"
+import rootReducer, { rootSaga } from "./modules/index"
+import { Provider } from "react-redux"
+import { composeWithDevTools } from "redux-devtools-extension" // 리덕스 개발자 도구
+import logger from "redux-logger"
+import ReduxThunk from "redux-thunk"
+import createSagaMiddleware from "redux-saga"
+
+const sagaMiddleware = createSagaMiddleware()
+
+
+/* 
+미들웨어가 여러개인경우에는 파라미터로 여러개를 전달해주면 됩니다. 예: applyMiddleware(a,b,c)
+미들웨어의 순서는 여기서 전달한 파라미터의 순서대로 지정됩니다.
+// 1. 스토어를 만들고 redux thunk 와 saga 미들웨어를 적용하세요.
+*/
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(ReduxThunk, sagaMiddleware, logger))
+) 
+
+
+sagaMiddleware.run(rootSaga)
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
+)
+```
+
+### Redux-thunk를 사용한 비동기처리 - thunk 함수 작성 실습
+
+실습1에는 이미 thunk 함수가 작성되어 있었습니다. 매우 기본적인 thunk 함수를 만들고 setTimeout을 사용하여 액션이 디스패치되는 것을 1초씩 딜레이 시켜보세요.
+
+1. src/modules/counter.js 내에 1초 후에 디스패치하는 thunk함수를 작성하세요.
+  - 다음과 같이 setTimeout(() => dispatch(); 함수를 사용하세요.
+2. 리듀서가 increase 할때와 decrease할때 상태를 업데이트 해주세요.
+
+```
+import {checkNumber} from "../apis/checkNumber"
+import {delay, put, takeEvery, takeLatest} from "redux-saga/effects"
+
+/* 액션 타입 */
+const INIT = "counter/INIT"
+const SET_DIFF = "counter/SET_DIFF"
+const INCREASE = "counter/INCREASE"
+const DECREASE = "counter/DECREASE"
+const INCREASE_ASYNC = "counter/INCREASE_ASYNC"
+const DECREASE_ASYNC = "counter/DECREASE_ASYNC"
+
+/* 숫자체크하기 프라미스 */
+const CHECK_NUMBER = "counter/CHECK_NUMBER"
+const CHECK_NUMBER_SUCCESS = "counter/CHECK_NUMBER_SUCCESS"
+const CHECK_NUMBER_ERROR = "counter/CHECK_NUMBER_ERROR"
+
+/* 액션 생성함수 */
+export const init = () => ({ type: INIT })
+export const setDiff = (diff) => ({
+  type: SET_DIFF,
+  diff: isNaN(Number(diff)) ? 0 : Number(diff),
+})
+export const increase = () => ({ type: INCREASE })
+export const decrease = () => ({ type: DECREASE })
+export const increaseAsync = () => ({ type: INCREASE_ASYNC })
+export const decreaseAsync = () => ({ type: DECREASE_ASYNC })
+
+//1초 후에 디스패치하는 thunk 함수
+export const increaseThunk = () => (dispatch) => {
+  setTimeout(() => dispatch(increase()), 1000)
+}
+export const decreaseThunk = () => (dispatch) => {
+  setTimeout(() => dispatch(decrease()), 1000)
+}
+export const checkNumberThunk = () => async (dispatch, getState) => {
+  dispatch({ type: CHECK_NUMBER })
+  try {
+    console.log(getState())
+    const checkResult = await checkNumber(getState().counter.number)
+    dispatch({ type: CHECK_NUMBER_SUCCESS, checkResult })
+  } catch (error) {
+    dispatch({ type: CHECK_NUMBER_ERROR, error })
+  }
+}
+
+
+//1초 후에 디스패치하는 사가 제너레이터
+function* increaseSaga(){
+  yield delay(1000) //1초 딜레이
+  yield put(increase()) //리듀서에 increase 액션 put(디스패치)(실행)
+}
+function* decreaseSaga(){
+  yield delay(1000) //1초 딜레이
+  yield put(decrease()) //리듀서에 increase 액션 put(디스패치)(실행)
+}
+
+//사가 제너레이터를 감시하는 watchSaga
+export function* watchSaga(){
+  //takeEvery(액션타입, 사가)
+  yield takeEvery(INCREASE_ASYNC, increaseSaga) //INCREASE_ASYNC액션이 발생하면 increaseSaga 실행
+  yield takeLatest(DECREASE_ASYNC, decreaseSaga) //DECREASE_ASYNC액션 처리 중 마지막 액션만 처리함.
+}
+
+
+
+
+/* 초기상태 */
+const initialState = {
+  number: 0,
+  diff: 1,
+  checkResult: null,
+}
+
+/* 리듀서 */
+export default function counter(state = initialState, action) {
+  switch (action.type) {
+    case INIT:
+      return initialState
+    case SET_DIFF:
+      return {
+        ...state,
+        diff: action.diff,
+      }
+    case INCREASE:
+      return {
+        ...state,
+        number: state.number + state.diff,
+      }
+    case DECREASE:
+      return {
+        ...state,
+        number: state.number - state.diff,
+      }
+    case CHECK_NUMBER_SUCCESS:
+      return {
+        ...state,
+        checkResult: action.checkResult,
+      }
+    default:
+      return state
+  }
+}
+```

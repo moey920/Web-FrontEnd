@@ -433,7 +433,7 @@ i = i + 1;
 }
 ```
 
-2. 만약에 액션 타입이 ‘DELETE’라면 다음과 같은 조건을 입력해서 컨텐츠가 삭제될경우 디폴트로 보여줄 객체 (‘welcome’)를 띄웁니다. 그러기 위해서는 mode를 welcome으로 바꾸세요.
+2. 만약에 액션 타입이 ‘DELETE’라면 다음과 같은 조건을 입력해서 컨텐츠가 삭제될경우 디폴트로 보여줄 객체 (‘welcome’)를 띄웁니다. 그러기 위해서는 mode를 'welcome'으로 바꾸세요.
 ```
 newState = Object.assign({},state, {
 contents:newContents,
